@@ -26,7 +26,7 @@ export function AuthProvider({ children }) {
     }, []);
 
     const login = async (email, password) => {
-        const res = await fetch('{process.env.REACT_APP_HostName}/api/login', {
+        const res = await fetch('/api/login', {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
@@ -38,7 +38,7 @@ export function AuthProvider({ children }) {
     };
 
     const logout = async () => {
-        const res = await fetch('{process.env.REACT_APP_HostName}/api/logout', {
+        const res = await fetch('/api/logout', {
             method: 'POST',
             credentials: 'include',
             // headers: { 'Content-Type': 'application/json' },
@@ -55,7 +55,7 @@ export function AuthProvider({ children }) {
 }
 
 async function getUserInfo() {
-    const res = await fetch('{process.env.REACT_APP_HostName}/api/getUserInfo', {
+    const res = await fetch('/api/getUserInfo', {
         method: 'POST',
         credentials: 'include',
     });
