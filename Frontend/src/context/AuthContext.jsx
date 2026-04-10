@@ -8,25 +8,21 @@ export function AuthProvider({ children }) {
 
     // Validate token on app load
     useEffect(() => {
-        if (token) {
-            // fetchCurrentUser(token)
-            //     .then(setUser)
-            //     .catch(() => { setToken(null); localStorage.removeItem('token'); })
-            //     .finally(() => setLoading(false));
-            try {
-                getUserInfo();
-            } catch (error) {
-                
-            } finally {
-                setLoading(false);
-            }
-        } else {
+        // fetchCurrentUser(token)
+        //     .then(setUser)
+        //     .catch(() => { setToken(null); localStorage.removeItem('token'); })
+        //     .finally(() => setLoading(false));
+        try {
+            getUserInfo();
+        } catch (error) {
+            
+        } finally {
             setLoading(false);
         }
     }, []);
 
     const login = async (email, password) => {
-        const res = await fetch('/api/login', {
+        const res = await fetch('/auth/login', {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
@@ -38,7 +34,7 @@ export function AuthProvider({ children }) {
     };
 
     const logout = async () => {
-        const res = await fetch('/api/logout', {
+        const res = await fetch('/auth/logout', {
             method: 'POST',
             credentials: 'include',
             // headers: { 'Content-Type': 'application/json' },
@@ -48,7 +44,7 @@ export function AuthProvider({ children }) {
     };
 
     return (
-        <AuthContext.Provider value={{ user, token, login, logout, loading }}>
+        <AuthContext.Provider value={{ user, login, logout, loading }}>
             {children}
         </AuthContext.Provider>
     );
