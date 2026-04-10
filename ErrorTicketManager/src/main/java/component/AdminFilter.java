@@ -3,41 +3,44 @@ package component;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.Role;
+import model.User;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import util.CookieUtil;
-import util.JWTUtil;
 import util.ResponseUtil;
 
 import java.io.IOException;
 
-public class JWTFilter extends OncePerRequestFilter {
+@Component
+public class AdminFilter extends OncePerRequestFilter {
     @Value("${jwt.cookie.name}")
     private String cookieName;
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        return !request.getRequestURI().startsWith("/api/*");
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        return !request.getRequestURI().startsWith("/api/admin");
     }
 
     @Override
-    @Order(1)
+    @Order(2)
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        Cookie cookie = CookieUtil.getJWTCookie(request.getCookies());
-        if (cookie == null) {
-            //TODO: check if verify throw exception or not
+        DecodedJWT decodedJWT = (DecodedJWT) request.getAttribute(cookieName);
+        if (decodedJWT == null) {
             ResponseUtil.writeErrorResponse(response, HttpStatus.UNAUTHORIZED);
             return;
         }
-        DecodedJWT decodedJWT = JWTUtil.verify(cookie.getValue());
-        request.setAttribute(cookieName, decodedJWT);
+
+        User user = decodedJWT.getClaim("user").as(User.class);
+        if (user == null || user.getRole() != Role.ADMIN) {
+            ResponseUtil.writeErrorResponse(response, HttpStatus.FORBIDDEN);
+            return;
+        }
+
         filterChain.doFilter(request, response);
     }
 }

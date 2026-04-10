@@ -24,13 +24,14 @@ public class JWTUtil {
         return JWT.create()
                 .withIssuer(jwtIssuer)
                 .withIssuedAt(Instant.now())
-                .withPayload(user.toString())
+                .withClaim("user", user.toString())
                 .sign(ALGORITHM);
     }
 
     public static DecodedJWT verify(String jwt) {
         JWTVerifier jwtVerifier = JWT.require(ALGORITHM)
                 .withIssuer(jwtIssuer)
+                .withClaimPresence("user")
                 .acceptIssuedAt(lifetime)
                 .build();
         return jwtVerifier.verify(jwt);

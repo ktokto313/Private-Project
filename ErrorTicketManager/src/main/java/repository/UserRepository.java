@@ -1,14 +1,22 @@
 package repository;
 
-import jakarta.annotation.Nullable;
+import jakarta.data.repository.*;
 import model.User;
-import org.hibernate.annotations.processing.Find;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
 @Repository
 public interface UserRepository {
-    @Find @Nullable
-    User findByUsername(String username);
+    @Find
+    List<User> findByUsername(String username);
+
+    @Find
+    User findByUserID(Integer userID);
+
+    @Save
+    User upsert(User user);
+
+    @Delete
+    void delete(User user);
 }

@@ -1,0 +1,1 @@
+insert into users(user_id, role, username, password)
