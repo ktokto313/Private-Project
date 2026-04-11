@@ -24,16 +24,21 @@ dependencies {
 	//implementation 'com.google.code.gson:gson:2.13.2'
 
 	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	//implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.security:spring-security-crypto'
+
 	implementation 'com.auth0:java-jwt:4.5.1'
-	implementation 'jakarta.data:jakarta.data-api:1.1.0-M3'
-	implementation 'org.hibernate.orm:hibernate-core:7.3.0.Final'
-	annotationProcessor 'org.hibernate.orm:hibernate-processor:7.3.0.Final'
-	implementation 'org.postgresql:postgresql'
+	implementation 'org.postgresql:postgresql:42.7.10'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile) {
+	options.compilerArgs << '-Xlint:unchecked'
+	options.deprecation = true
 }
