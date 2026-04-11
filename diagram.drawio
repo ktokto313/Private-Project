@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.6.6 Chrome/144.0.7559.236 Electron/40.8.4 Safari/537.36" version="29.6.6">
   <diagram id="TOdVhcgTKSayoKSFNZuR" name="Page-1">
-    <mxGraphModel dx="754" dy="634" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="925" dy="607" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -610,7 +610,7 @@
           <mxGeometry height="30" width="140" y="150" as="geometry" />
         </mxCell>
         <mxCell id="zuo7TIclUcn-8z_JFZ8V-50" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="Enum State" vertex="1">
-          <mxGeometry height="150" width="140" y="1530" as="geometry" />
+          <mxGeometry height="150" width="140" x="1980" y="1835" as="geometry" />
         </mxCell>
         <mxCell id="zuo7TIclUcn-8z_JFZ8V-51" parent="zuo7TIclUcn-8z_JFZ8V-50" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" value="Created" vertex="1">
           <mxGeometry height="30" width="140" y="30" as="geometry" />
@@ -656,7 +656,7 @@
           <mxGeometry height="30" width="140" y="150" as="geometry" />
         </mxCell>
         <mxCell id="zuo7TIclUcn-8z_JFZ8V-61" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="Enum Role" vertex="1">
-          <mxGeometry height="120" width="140" y="1395" as="geometry" />
+          <mxGeometry height="120" width="140" x="1980" y="1700" as="geometry" />
         </mxCell>
         <mxCell id="zuo7TIclUcn-8z_JFZ8V-62" parent="zuo7TIclUcn-8z_JFZ8V-61" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" value="USER" vertex="1">
           <mxGeometry height="30" width="140" y="30" as="geometry" />
@@ -772,7 +772,7 @@
           <mxGeometry height="30" width="140" y="90" as="geometry" />
         </mxCell>
         <mxCell id="zuo7TIclUcn-8z_JFZ8V-78" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="Enum AttachmentType" vertex="1">
-          <mxGeometry height="90" width="140" y="1290" as="geometry" />
+          <mxGeometry height="90" width="140" x="1980" y="1595" as="geometry" />
         </mxCell>
         <mxCell id="zuo7TIclUcn-8z_JFZ8V-79" parent="zuo7TIclUcn-8z_JFZ8V-78" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" value="Ticket" vertex="1">
           <mxGeometry height="30" width="140" y="30" as="geometry" />
