@@ -20,8 +20,6 @@ import lkt.util.CookieUtil;
 public class AuthController {
     @Autowired
     private IAuthService authService;
-    @Value("${jwt.cookie.name}")
-    private String cookieName;
 
     @PostMapping("/login")
     public ResponseEntity<Void> login(@RequestBody User user) {
@@ -30,9 +28,8 @@ public class AuthController {
             //Todo remove debug
             System.out.println(user);
             ResponseCookie cookie = CookieUtil.makeCookieFromJWT(jwt);
-            String stringBuilder = cookieName + '=' + cookie;
             return ResponseEntity.ok()
-                    .header(HttpHeaders.SET_COOKIE, stringBuilder)
+                    .header(HttpHeaders.SET_COOKIE, cookie.toString())
                     .build();
         } catch (Exception e) {
             //TODO remove debug

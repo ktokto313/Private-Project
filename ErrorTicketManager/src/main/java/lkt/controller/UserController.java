@@ -3,6 +3,7 @@ package lkt.controller;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.servlet.http.HttpServletRequest;
 import lkt.model.User;
+import lkt.util.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -84,7 +85,6 @@ public class UserController {
     }
 
     private User getUser(HttpServletRequest request) {
-        DecodedJWT decodedJWT = (DecodedJWT) request.getAttribute(cookieName);
-        return decodedJWT.getClaim("user").as(User.class);
+        return JWTUtil.getUser(request);
     }
 }

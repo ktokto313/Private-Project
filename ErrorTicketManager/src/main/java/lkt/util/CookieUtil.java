@@ -22,8 +22,10 @@ public class CookieUtil {
     }
 
     public static ResponseCookie makeCookieFromJWT(String jwt) {
-        return ResponseCookie.from(jwt)
+        return ResponseCookie.from(cookieName)
+                .value(jwt)
                 .httpOnly(true)
+                .path("/")
                 .secure(true)
                 .sameSite("Strict")
                 .maxAge(cookieMaxAge)
@@ -31,13 +33,18 @@ public class CookieUtil {
     }
 
     public static ResponseCookie invalidateCookie(String cookie) {
-        return ResponseCookie.from(cookie)
+        return ResponseCookie.from(cookieName)
+                .value("")
+                .path("/")
+                .secure(true)
                 .httpOnly(true)
+                .sameSite("Strict")
                 .maxAge(0)
                 .build();
     }
 
     public static Cookie getJWTCookie(Cookie[] cookies) {
+        if (cookies == null) return null;
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals(cookieName)) return cookie;
         }

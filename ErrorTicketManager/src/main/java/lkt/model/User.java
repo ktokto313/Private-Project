@@ -1,5 +1,8 @@
 package lkt.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lkt.util.Util;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -38,6 +41,10 @@ public class User implements Serializable {
         this.role = role;
     }
 
+    public void setRole(String role) {
+        this.role = Util.getRoleFromString(role);
+    }
+
     public String getUsername() {
         return username;
     }
@@ -62,10 +69,12 @@ public class User implements Serializable {
         this.department = department;
     }
 
+    @JsonIgnore
     public Integer getDepartmentID() {
         return department == null ? null : department.getID();
     }
 
+    @JsonIgnore
     public void setDepartmentID(Integer departmentID) {
         if (departmentID == null) {
             this.department = null;
@@ -76,6 +85,7 @@ public class User implements Serializable {
         this.department = departmentRef;
     }
 
+    @JsonIgnore
     public User getUserNoPassword() {
         return new User(userID, role, username, null, department);
     }
