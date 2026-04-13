@@ -22,20 +22,22 @@ public class AuthController {
     private IAuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody User user) {
+    public ResponseEntity<User> login(@RequestBody User user) {
         try {
+            System.out.println(user);
             String jwt = authService.login(user);
+            if (jwt.isBlank()) return ResponseEntity.status(401).build();
             //Todo remove debug
             System.out.println(user);
             ResponseCookie cookie = CookieUtil.makeCookieFromJWT(jwt);
             return ResponseEntity.ok()
                     .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                    .build();
+                    .body(user);
         } catch (Exception e) {
             //TODO remove debug
             e.printStackTrace();
-            return ResponseEntity.status(401).build();
         }
+        return ResponseEntity.status(401).build();
     }
 
     @PostMapping("/logout")
