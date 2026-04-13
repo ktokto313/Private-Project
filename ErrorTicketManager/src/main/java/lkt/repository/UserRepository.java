@@ -49,7 +49,7 @@ public class UserRepository implements IUserRepository {
     @Override
     public User insert(User user) {
         try {
-            String sql = "insert into users (id, role, username, password, department_id) values {?, ?, ?, ?, ?}";
+            String sql = "insert into users (id, role, username, password, departmentid) values {?, ?, ?, ?, ?}";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, user.getUserID());
             preparedStatement.setString(2, user.getRole().toString());
@@ -68,7 +68,7 @@ public class UserRepository implements IUserRepository {
     @Override
     public User update(User user) {
         try {
-            String sql = "update users set role=?, username=?, password=?, department_id=? where id = ?";
+            String sql = "update users set role=?::role, username=?, password=?, departmentid=? where id=?";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, user.getRole().toString());
             preparedStatement.setString(2, user.getUsername());

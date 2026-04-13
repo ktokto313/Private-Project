@@ -18,7 +18,7 @@ public class UserMapper {
         user.setUsername(resultSet.getString("username"));
         user.setPassword(resultSet.getString("password"));
         Department department = new Department();
-        department.setID(resultSet.getInt("department_id"));
+        department.setID(resultSet.getInt("departmentid"));
         user.setDepartment(department);
         return user;
     }
