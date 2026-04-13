@@ -21,15 +21,16 @@ export function AuthProvider({ children }) {
         }
     }, []);
 
-    const login = async (email, password) => {
+    const login = async (username, password) => {
         const res = await fetch('/api/auth/login', {
             method: 'POST',
-            credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password }),
+            body: JSON.stringify({"username":username, "password":password})
         });
-        if (!res.ok) throw new Error('Invalid credentials');
-        const { user } = await res.json();
+        if (!res.ok) {
+            throw new Error('Invalid credentials');
+        }
+        const user = await res.json();
         setUser(user);
     };
 
@@ -52,10 +53,13 @@ export function AuthProvider({ children }) {
 
 async function getUserInfo() {
     const res = await fetch('/api/users/me', {
-        method: 'POST',
+        method: 'GET',
         credentials: 'include',
     });
-    if (!res.ok) return;
+    if (!res.ok) {
+        console.log(res);
+        return;
+    }
     const { user } = await res.json();
     setUser(user);
 }

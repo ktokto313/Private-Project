@@ -6,7 +6,7 @@ import { useAuth } from '../context/AuthContext';
 export default function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [status, setStatus] = useState('idle'); // idle | loading | error
 
@@ -14,7 +14,7 @@ export default function LoginPage() {
     e.preventDefault();
     setStatus('loading');
     try {
-      await login(email, password);
+      await login(username, password);
       navigate('/dashboard');
     } catch {
       setStatus('error');
@@ -24,10 +24,10 @@ export default function LoginPage() {
   return (
     <form onSubmit={handleSubmit}>
       <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
+        type="username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        placeholder="Username"
         required
       />
       <input
