@@ -24,7 +24,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        return !request.getRequestURI().startsWith("/api");
+        return request.getRequestURI().startsWith("/api/auth");
     }
 
     @Override

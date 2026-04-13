@@ -16,7 +16,7 @@ import lkt.service.IAuthService;
 import lkt.util.CookieUtil;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
     @Autowired
     private IAuthService authService;
