@@ -75,13 +75,13 @@ public class UserRepository implements IUserRepository {
             preparedStatement.setString(3, user.getPassword());
             preparedStatement.setInt(4, user.getDepartmentID());
             preparedStatement.setInt(5, user.getUserID());
-            ResultSet resultSet = preparedStatement.executeQuery();
-            return mapper.getUser(resultSet);
+            if (preparedStatement.executeUpdate() == 1) {
+                return user;
+            }
         } catch (SQLException e) {
-            // Exception can happen when role is wrong or department_id is not correct
             e.printStackTrace();
-            return null;
         }
+        return null;
     }
 
     @Override
@@ -90,11 +90,11 @@ public class UserRepository implements IUserRepository {
             String sql = "delete from users where id=?";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, user.getUserID());
-            preparedStatement.execute();
-            return true;
+            if (preparedStatement.executeUpdate() == 1)
+                return true;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
+        return false;
     }
 }
