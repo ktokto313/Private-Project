@@ -20,9 +20,12 @@ services:
     ports:
       - 5432:5432
 
-  adminer:
-    image: adminer
+  pqAdmin:
+    image: dpage/pgadmin4
     restart: unless-stopped
+    volumes: 
+      - ./sql:/var/lib/pgadmin/storage/a_a.a
+    env_file: "postgresql.env"
     ports:
-      - 8080:8080
+      - 80:80
 
