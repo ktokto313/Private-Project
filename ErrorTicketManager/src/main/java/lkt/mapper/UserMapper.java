@@ -11,6 +11,7 @@ import java.sql.SQLException;
 @Component
 public class UserMapper {
     public User getUser(ResultSet resultSet) throws SQLException {
+        resultSet.next();
         User user = new User();
         user.setUserID(resultSet.getInt("id"));
         user.setRole(Util.getRoleFromString(resultSet.getString("role")));
@@ -18,7 +19,6 @@ public class UserMapper {
         user.setPassword(resultSet.getString("password"));
         Department department = new Department();
         department.setID(resultSet.getInt("department_id"));
-        department.setName(resultSet.getString("name"));
         user.setDepartment(department);
         return user;
     }
