@@ -4,22 +4,6 @@ const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
-
-    // Validate token on app load
-    useEffect(() => {
-        // fetchCurrentUser(token)
-        //     .then(setUser)
-        //     .catch(() => { setToken(null); localStorage.removeItem('token'); })
-        //     .finally(() => setLoading(false));
-        try {
-            getUserInfo();
-        } catch (error) {
-            
-        } finally {
-            setLoading(false);
-        }
-    }, []);
 
     const login = async (username, password) => {
         const res = await fetch('/api/auth/login', {
@@ -44,24 +28,30 @@ export function AuthProvider({ children }) {
         setUser(null);
     };
 
+    const getUserInfo = async () => {
+        fetch('/api/users/me', {
+            method: 'GET',
+            credentials: 'include',
+        })
+            .then(function(response) {
+                if (!response.ok) {
+                    return;
+                }
+                return response.json();
+            }).then(function(data) {
+                setUser(data);
+            }).catch();
+    }
+
+    useEffect(()=> {
+        getUserInfo();
+    }, []);
+
     return (
-        <AuthContext.Provider value={{ user, login, logout, loading }}>
+        <AuthContext.Provider value={{ user, login, logout }}>
             {children}
         </AuthContext.Provider>
     );
-}
-
-async function getUserInfo() {
-    const res = await fetch('/api/users/me', {
-        method: 'GET',
-        credentials: 'include',
-    });
-    if (!res.ok) {
-        console.log(res);
-        return;
-    }
-    const { user } = await res.json();
-    setUser(user);
 }
 
 export const useAuth = () => useContext(AuthContext);

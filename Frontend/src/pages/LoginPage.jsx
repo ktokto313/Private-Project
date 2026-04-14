@@ -1,10 +1,10 @@
 // src/pages/LoginPage.jsx
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 export default function LoginPage() {
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -20,6 +20,11 @@ export default function LoginPage() {
       setStatus('error');
     }
   };
+
+  useEffect(()=> {
+    if (user)
+      navigate('/dashboard');
+  }, [user]);
 
   return (
     <form onSubmit={handleSubmit}>
