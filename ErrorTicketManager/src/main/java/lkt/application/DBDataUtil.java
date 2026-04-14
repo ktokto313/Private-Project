@@ -15,6 +15,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class DBDataUtil {
     private static IUserRepository userRepository;
 
+    static {
+        System.setProperty("user.timezone", "Asia/Ho_Chi_Minh");
+    }
+
     @Autowired
     private void setUserRepository(IUserRepository userRepository) {DBDataUtil.userRepository = userRepository;}
 
