@@ -2,6 +2,7 @@ package lkt.mapper;
 
 import lkt.model.*;
 import lkt.util.Util;
+import org.postgresql.util.PGInterval;
 import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
@@ -34,7 +35,7 @@ public class Mapper {
         ticket.setCause(resultSet.getString("ticket_cause"));
         ticket.setCreator(mapUser(resultSet, "creator"));
         ticket.setAssignee(mapUser(resultSet, "assignee"));
-        ticket.setPriority(mapPriority(resultSet));
+        ticket.setPriority(mapTicketPriority(resultSet));
         ticket.setTicketType(mapTicketType(resultSet));
         return ticket;
     }
@@ -52,7 +53,7 @@ public class Mapper {
         return user.getUserNoPassword();
     }
 
-    public Priority mapPriority(ResultSet resultSet) throws SQLException {
+    public Priority mapTicketPriority(ResultSet resultSet) throws SQLException {
         Integer id = (Integer) resultSet.getObject("priority_id");
         if (id == null) {
             return null;
@@ -74,5 +75,15 @@ public class Mapper {
         ticketType.setTitle(resultSet.getString("tickettype_title"));
         ticketType.setDescription(resultSet.getString("tickettype_description"));
         return ticketType;
+    }
+
+    public Priority mapPriority(ResultSet resultSet) throws SQLException {
+        Priority priority = new Priority();
+        priority.setID(resultSet.getInt("id"));
+        priority.setLevelOfPriority(resultSet.getInt("levelofpriority"));
+        priority.setName(resultSet.getString("name"));
+        priority.setTimeToRespond(resultSet.getObject("timetorespond", PGInterval.class));
+        priority.setTimeToFinish(resultSet.getObject("timetofinish", PGInterval.class));
+        return priority;
     }
 }

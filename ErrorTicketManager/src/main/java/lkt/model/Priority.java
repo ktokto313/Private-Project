@@ -1,5 +1,7 @@
 package lkt.model;
 
+import org.postgresql.util.PGInterval;
+
 import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
@@ -8,8 +10,8 @@ public class Priority {
     private Integer ID;
     private int levelOfPriority;
     private String name;
-    private Duration timeToRespond;
-    private Duration timeToFinish;
+    private PGInterval timeToRespond;
+    private PGInterval timeToFinish;
 
     public Integer getID() {
         return ID;
@@ -35,19 +37,19 @@ public class Priority {
         this.name = name;
     }
 
-    public Duration getTimeToRespond() {
+    public PGInterval getTimeToRespond() {
         return timeToRespond;
     }
 
-    public void setTimeToRespond(Duration timeToRespond) {
+    public void setTimeToRespond(PGInterval timeToRespond) {
         this.timeToRespond = timeToRespond;
     }
 
-    public Duration getTimeToFinish() {
+    public PGInterval getTimeToFinish() {
         return timeToFinish;
     }
 
-    public void setTimeToFinish(Duration timeToFinish) {
+    public void setTimeToFinish(PGInterval timeToFinish) {
         this.timeToFinish = timeToFinish;
     }
 }

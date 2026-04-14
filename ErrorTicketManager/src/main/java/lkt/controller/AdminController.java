@@ -4,12 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import lkt.model.Priority;
 import lkt.service.IAdminService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -44,6 +48,35 @@ public class AdminController {
     @DeleteMapping("/users/{userID}")
     public ResponseEntity<Void> deleteAccount(@PathVariable Integer userID) {
         boolean deleted = adminService.deleteAccount(userID);
+        if (!deleted) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/priorities")
+    public ResponseEntity<List<Priority>> getPriorities() {
+        return ResponseEntity.ok(adminService.getPriorities());
+    }
+
+    @PutMapping("/priorities/{priority-id}")
+    public ResponseEntity<Void> changePriority(
+            @PathVariable("priority-id") Integer priorityID,
+            @RequestParam int levelOfPriority,
+            @RequestParam String name,
+            @RequestParam String timeToRespond,
+            @RequestParam String timeToFinish
+    ) {
+        boolean updated = adminService.changePriority(priorityID, levelOfPriority, name, timeToRespond, timeToFinish);
+        if (!updated) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/priorities/{priority-id}")
+    public ResponseEntity<Void> deletePriority(@PathVariable("priority-id") Integer priorityID) {
+        boolean deleted = adminService.deletePriority(priorityID);
         if (!deleted) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
