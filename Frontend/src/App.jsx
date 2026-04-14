@@ -5,6 +5,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Dashboard from './pages/dashboard/Dashboard';
 import LoginPage from './pages/LoginPage'
 import Profile from './pages/dashboard/Dashboard';
+import './App.css';
 
 export default function App() {
   return (

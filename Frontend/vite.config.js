@@ -5,21 +5,16 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   // Source - https://stackoverflow.com/a/78033472
-// Posted by Kavishwa Wendakoon, modified by community. See post 'Timeline' for change history
-// Retrieved 2026-04-13, License - CC BY-SA 4.0
+  // Posted by Kavishwa Wendakoon, modified by community. See post 'Timeline' for change history
+  // Retrieved 2026-04-13, License - CC BY-SA 4.0
 
-server: {
+  server: {
     // host: "0.0.0.0",
     proxy: {
-      "/api" : "http://172.26.144.1:8081"
-      // "/api": {
-      //   target: "http://localhost:8081",
-      //   changeOrigin: true,
-      //   rewrite: (path) => {
-      //     path.replace(/^\/api/, "/api")
-      //     console.log(path);
-      //   },
-      // },
+      // "/api" : "http://172.26.144.1:8081"
+      "/api": {
+        target: "http://localhost:8081",
+      },
     },
   },
 })
