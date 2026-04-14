@@ -1,8 +1,8 @@
 package lkt.model;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Ticket {
     private Integer ID;
@@ -18,6 +18,8 @@ public class Ticket {
     private User assignee;
     private String cause;
     private Comment result;
+    private List<Comment> comments = new ArrayList<>();
+    private List<Attachment> attachments = new ArrayList<>();
 
     public Integer getID() {
         return ID;
@@ -121,5 +123,21 @@ public class Ticket {
 
     public void setResult(Comment result) {
         this.result = result;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public List<Attachment> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<Attachment> attachments) {
+        this.attachments = attachments;
     }
 }

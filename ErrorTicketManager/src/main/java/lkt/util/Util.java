@@ -4,6 +4,11 @@ import lkt.model.AttachmentType;
 import lkt.model.Role;
 import lkt.model.State;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 public class Util {
     public static AttachmentType getAttachmentTypeFromString(String string) {
         for (AttachmentType attachmentType : AttachmentType.values()) {
@@ -24,5 +29,10 @@ public class Util {
             if (string.equals(state.toString())) return state;
         }
         return null;
+    }
+
+    public static LocalDateTime getLocalDateTime(ResultSet resultSet, String columnName) throws SQLException {
+        Timestamp timestamp = resultSet.getTimestamp(columnName);
+        return timestamp == null ? null : timestamp.toLocalDateTime();
     }
 }

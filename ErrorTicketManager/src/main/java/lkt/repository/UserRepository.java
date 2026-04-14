@@ -1,6 +1,6 @@
 package lkt.repository;
 
-import lkt.mapper.UserMapper;
+import lkt.mapper.Mapper;
 import lkt.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -15,7 +15,7 @@ public class UserRepository implements IUserRepository {
     @Autowired
     private Connection connection;
     @Autowired
-    private UserMapper mapper;
+    private Mapper mapper;
 
     @Override
     public User findByUsername(String username) {

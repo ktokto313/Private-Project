@@ -1,10 +1,13 @@
 package lkt.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Attachment {
     private Integer id;
+    private byte[] content;
     private AttachmentType attachedObjectType;
+    private Integer attachedObjectID;
     private String contentType;
-    private Object attachable;
     private User uploader;
 
     public Integer getId() {
@@ -15,6 +18,14 @@ public class Attachment {
         this.id = id;
     }
 
+    public byte[] getContent() {
+        return content;
+    }
+
+    public void setContent(byte[] content) {
+        this.content = content;
+    }
+
     public AttachmentType getAttachedObjectType() {
         return attachedObjectType;
     }
@@ -23,20 +34,20 @@ public class Attachment {
         this.attachedObjectType = attachedObjectType;
     }
 
+    public Integer getAttachedObjectID() {
+        return attachedObjectID;
+    }
+
+    public void setAttachedObjectID(Integer attachedObjectID) {
+        this.attachedObjectID = attachedObjectID;
+    }
+
     public String getContentType() {
         return contentType;
     }
 
     public void setContentType(String contentType) {
         this.contentType = contentType;
-    }
-
-    public Object getAttachable() {
-        return attachable;
-    }
-
-    public void setAttachable(Object attachable) {
-        this.attachable = attachable;
     }
 
     public User getUploader() {

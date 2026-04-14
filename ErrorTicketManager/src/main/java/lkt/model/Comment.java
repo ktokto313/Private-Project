@@ -1,6 +1,10 @@
 package lkt.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class Comment {
@@ -9,6 +13,7 @@ public class Comment {
     private User creator;
     private Ticket ticket;
     private LocalDateTime timeCreated;
+    private List<Attachment> attachments = new ArrayList<>();
 
     public Integer getID() {
         return ID;
@@ -34,19 +39,19 @@ public class Comment {
         this.creator = creator;
     }
 
-    public Ticket getTicket() {
-        return ticket;
-    }
-
-    public void setTicket(Ticket ticket) {
-        this.ticket = ticket;
-    }
-
     public LocalDateTime getTimeCreated() {
         return timeCreated;
     }
 
     public void setTimeCreated(LocalDateTime timeCreated) {
         this.timeCreated = timeCreated;
+    }
+
+    public List<Attachment> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<Attachment> attachments) {
+        this.attachments = attachments;
     }
 }
