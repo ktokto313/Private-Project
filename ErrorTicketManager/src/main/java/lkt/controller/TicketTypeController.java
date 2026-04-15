@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/ticketType")
+@RequestMapping("/api/ticket-type")
 public class TicketTypeController {
     @Autowired
     private ITicketTypeService ticketTypeService;
