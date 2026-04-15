@@ -7,6 +7,8 @@ const performAuth = async () => { /* Auth stub */ };
 // const navigate = useNavigate(); /* Routing stub */
 // ---------------------------------------------------
 
+import NewTicketForm from '../../components/NewTicketForm/NewTicketForm';
+
 const MOCK_TICKETS = [
   {
     id: 'TKT-001',
@@ -25,15 +27,6 @@ const STATUS_MAP = {
   3: 'Closed'
 };
 
-const NewTicketForm = ({ onClose }) => (
-  <div className="modal-overlay">
-    <div className="modal-content">
-      <h2>Create New Ticket (Stub)</h2>
-      <p>This is a placeholder for the New Ticket Form.</p>
-      <button onClick={onClose} className="btn primary-btn">Close Modal</button>
-    </div>
-  </div>
-);
 
 export default function Dashboard() {
   const [tickets, setTickets] = useState(MOCK_TICKETS);
@@ -184,7 +177,10 @@ export default function Dashboard() {
       </div>
 
       {isNewTicketModalOpen && (
-        <NewTicketForm onClose={() => setIsNewTicketModalOpen(false)} />
+        <NewTicketForm 
+          onClose={() => setIsNewTicketModalOpen(false)} 
+          onRefresh={() => console.log('Refresh tickets')} 
+        />
       )}
     </div>
   );

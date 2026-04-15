@@ -1,0 +1,170 @@
+.ntf-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.ntf-modal-content {
+  box-sizing: border-box;
+  background-color: white;
+  padding: 30px;
+  border-radius: 4px;
+  overflow: auto;
+  height: 95vh;
+  width: 90%;
+  max-width: 600px;
+  border: 3px solid #000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.ntf-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.ntf-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.ntf-form-group label {
+  font-weight: 500;
+  font-size: 14px;
+  color: #333;
+}
+
+.ntf-form-group input[type="text"],
+.ntf-form-group select,
+.ntf-form-group textarea {
+  padding: 10px;
+  border: 2px solid #000;
+  border-radius: 0;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.ntf-form-group select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23000000%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px top 50%;
+  background-size: 12px auto;
+  padding-right: 30px;
+}
+
+.ntf-detail-textarea {
+  min-height: 120px;
+  resize: vertical; /* Allows expanding */
+  overflow-y: auto; /* Scrollbar if needed */
+}
+
+.ntf-row {
+  display: flex;
+  gap: 20px;
+}
+
+.ntf-half-width {
+  flex: 1;
+}
+
+.ntf-file-upload-box {
+  border: 2px solid #000;
+  padding: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  cursor: pointer;
+  position: relative;
+}
+
+.ntf-file-input {
+  width: 100%;
+  cursor: pointer;
+}
+
+.ntf-file-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0 0;
+  font-size: 13px;
+}
+
+.ntf-file-list li {
+  display: flex;
+  justify-content: space-between;
+  background: #f0f0f0;
+  padding: 5px 10px;
+  margin-bottom: 5px;
+  border-radius: 4px;
+}
+
+.ntf-file-list li button {
+  background: none;
+  border: none;
+  color: red;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.ntf-error-input {
+  border-color: red !important;
+}
+
+.ntf-error-text {
+  color: red;
+  font-size: 12px;
+}
+
+.ntf-submit-error {
+  text-align: center;
+  font-weight: bold;
+}
+
+.ntf-form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.ntf-btn-cancel,
+.ntf-btn-submit {
+  padding: 10px 30px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 2px solid #000;
+}
+
+.ntf-btn-cancel {
+  background-color: #fff;
+  color: #000;
+}
+
+.ntf-btn-cancel:hover {
+  background-color: #f5f5f5;
+}
+
+.ntf-btn-submit {
+  background-color: #bdf838; /* lime green from wireframe */
+  color: #000;
+}
+
+.ntf-btn-submit:hover {
+  background-color: #a8de30;
+}
+
+.ntf-btn-cancel:disabled,
+.ntf-btn-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
