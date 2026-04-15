@@ -1,11 +1,8 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import './Dashboard.css';
 
-
-// const navigate = useNavigate(); /* Routing stub */
-// ---------------------------------------------------
-
 import NewTicketForm from '../../components/NewTicketForm/NewTicketForm';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const STATUS_MAP = {
   CREATED: 0,
@@ -14,6 +11,7 @@ const STATUS_MAP = {
   DONE: 3
 };
 
+const navigate = useNavigate(); 
 
 export default function Dashboard() {
   const [tickets, setTickets] = useState([]);
@@ -106,6 +104,10 @@ export default function Dashboard() {
     return parts.join(' ') || '0s';
   };
 
+  const ticketOnClick = (ticketID) => {
+    navigate("/ticket/:"+ticketID);
+  };
+
   const totalFilteredCount = filteredTickets.length;
 
   return (
@@ -164,7 +166,7 @@ export default function Dashboard() {
           </thead>
           <tbody>
             {filteredTickets.map(ticket => (
-              <tr key={ticket.ID}>
+              <tr key={ticket.ID} onClick={() => ticketOnClick(ticket.ID)}>
                 <td>{ticket.ID}</td>
                 <td>{ticket.title}</td>
                 <td>
