@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import './NewTicketForm.css';
 
-// --- STUBS FOR API CALLS ---
-const fetchProblemTypesAPI = async () => {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 500));
-  return [
-    { id: '1', name: 'Hardware Issue' },
-    { id: '2', name: 'Software Bug' },
-    { id: '3', name: 'Access Request' },
-    { id: '4', name: 'Other' }
-  ];
+const fetchTicketTypesAPI = async () => {
+  fetch("/api/ticket-type", {
+    method: "GET"
+  })
+    .then((res)=> {
+      return res.json();
+    })
 };
 
 const submitTicketAPI = async (ticketData) => {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 800));
-  console.log('Ticket submitted successfully:', ticketData);
-  return { success: true };
+  fetch("/api/tickets", {
+    method: "GET"
+  })
+    .then((res)=> {
+      console.log('Ticket submitted successfully:', ticketData);
+      if (res.ok) return { success: true };
+    })
 };
 // ---------------------------
 
@@ -30,7 +30,7 @@ const NewTicketForm = ({ onClose, onRefresh }) => {
     attachments: []
   });
   
-  const [problemTypes, setProblemTypes] = useState([]);
+  const [ticketTypes, setTicketTypes] = useState([]);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -38,8 +38,8 @@ const NewTicketForm = ({ onClose, onRefresh }) => {
     // Fetch problem types on mount
     const fetchOptions = async () => {
       try {
-        const types = await fetchProblemTypesAPI();
-        setProblemTypes(types);
+        const types = await fetchTicketTypesAPI();
+        setTicketTypes(types);
       } catch (error) {
         console.error("Failed to fetch problem types", error);
       }
@@ -178,7 +178,7 @@ const NewTicketForm = ({ onClose, onRefresh }) => {
                 disabled={isSubmitting}
               >
                 <option value="" disabled></option>
-                {problemTypes.map(type => (
+                {ticketTypes.map(type => (
                   <option key={type.id} value={type.id}>{type.name}</option>
                 ))}
               </select>

@@ -1,15 +1,13 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import './Dashboard.css';
 
-// --- PLACEHOLDER STUBS FOR FEATURES NOT IN SCOPE ---
-const fetchTicketsAPI = async () => { /* API call stub */ };
-const performAuth = async () => { /* Auth stub */ };
+
 // const navigate = useNavigate(); /* Routing stub */
 // ---------------------------------------------------
 
 import NewTicketForm from '../../components/NewTicketForm/NewTicketForm';
 
-const MOCK_TICKETS = [
+const ticketList = [
   {
     id: 'TKT-001',
     title: 'Cannot login to the system',
@@ -29,7 +27,7 @@ const STATUS_MAP = {
 
 
 export default function Dashboard() {
-  const [tickets, setTickets] = useState(MOCK_TICKETS);
+  const [tickets, setTickets] = useState(ticketList);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [isNewTicketModalOpen, setIsNewTicketModalOpen] = useState(false);
@@ -50,6 +48,10 @@ export default function Dashboard() {
     };
   }, [filterDropdownRef]);
 
+  useEffect(()=> {
+    fetchTicketsAPI();
+  }, []);
+
   const handleFilterToggle = () => {
     setIsFilterOpen(!isFilterOpen);
   };
@@ -67,6 +69,18 @@ export default function Dashboard() {
   const handleClearFilters = () => {
     setSelectedFilters([]);
     setCurrentPage(1);
+  };
+
+  const fetchTicketsAPI = async () => {
+    fetch("/api/tickets", {
+      method: "GET"
+    })
+      .then((res)=> {
+        setTickets(res.json());
+      })
+      .catch((e)=> {
+        console.log(e);
+      });
   };
 
   const filteredTickets = useMemo(() => {
