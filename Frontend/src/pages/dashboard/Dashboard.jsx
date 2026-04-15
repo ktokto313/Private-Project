@@ -8,10 +8,10 @@ import './Dashboard.css';
 import NewTicketForm from '../../components/NewTicketForm/NewTicketForm';
 
 const STATUS_MAP = {
-  0: 'CREATED',
-  1: 'PROCESSING',
-  2: 'RESOLVED',
-  3: 'DONE'
+  CREATED: 0,
+  PROCESSING: 1,
+  RESOLVED: 2,
+  DONE: 3
 };
 
 
@@ -45,8 +45,7 @@ export default function Dashboard() {
     setIsFilterOpen(!isFilterOpen);
   };
 
-  const handleFilterChange = (statusKey) => {
-    const key = parseInt(statusKey, 10);
+  const handleFilterChange = (key) => {
     if (selectedFilters.includes(key)) {
       setSelectedFilters(selectedFilters.filter(f => f !== key));
     } else {
@@ -71,14 +70,14 @@ export default function Dashboard() {
 
   const filteredTickets = useMemo(() => {
     if (selectedFilters.length === 0) return tickets;
-    return tickets.filter(ticket => selectedFilters.includes(ticket.status));
+    return tickets.filter(ticket => selectedFilters.includes(ticket.state));
   }, [tickets, selectedFilters]);
 
   const ticketCountsByStatus = useMemo(() => {
     const counts = { 0: 0, 1: 0, 2: 0, 3: 0 };
     tickets.forEach(ticket => {
-      if (counts[ticket.status] !== undefined) {
-        counts[ticket.status]++;
+      if (counts[STATUS_MAP[ticket.state]] !== undefined) {
+        counts[STATUS_MAP[ticket.state]]++;
       }
     });
     return counts;
@@ -130,14 +129,14 @@ export default function Dashboard() {
                 </button>
               </div>
               <div className="filter-options">
-                {[0, 1, 2, 3].map(statusKey => (
+                {Object.entries(STATUS_MAP).map(([value, statusKey]) => (
                   <label key={statusKey} className="filter-option">
                     <input 
                       type="checkbox" 
-                      checked={selectedFilters.includes(statusKey)}
-                      onChange={() => handleFilterChange(statusKey)}
+                      checked={selectedFilters.includes(value)}
+                      onChange={() => handleFilterChange(value)}
                     />
-                    <span className="status-label">{STATUS_MAP[statusKey]}</span>
+                    <span className="status-label">{value}</span>
                     <span className="badge">{ticketCountsByStatus[statusKey]}</span>
                   </label>
                 ))}
@@ -169,8 +168,8 @@ export default function Dashboard() {
                 <td>{ticket.ID}</td>
                 <td>{ticket.title}</td>
                 <td>
-                  <span className={`status-badge status-${ticket.status}`}>
-                    {STATUS_MAP[ticket.status]}
+                  <span className={`status-badge status-${STATUS_MAP[ticket.state]}`}>
+                    {ticket.state}
                   </span>
                 </td>
                 <td>{ticket.priority.name}</td>
