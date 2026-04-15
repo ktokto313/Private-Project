@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react';
 import './NewTicketForm.css';
 
 const fetchTicketTypesAPI = async () => {
-  fetch("/api/ticket-type", {
+  const res = await fetch("/api/ticket-type", {
     method: "GET"
   })
-    .then((res)=> {
-      return res.json();
-    })
+  if (!res.ok) return;
+  const resp = await res.json();
+  return resp;
 };
 
 const submitTicketAPI = async (ticketData) => {
-  fetch("/api/tickets", {
+  await fetch("/api/tickets", {
     method: "GET"
   })
     .then((res)=> {

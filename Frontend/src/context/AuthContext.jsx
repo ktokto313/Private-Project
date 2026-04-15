@@ -29,7 +29,8 @@ export function AuthProvider({ children }) {
     };
 
     const getUserInfo = async () => {
-        fetch('/api/users/me', {
+        // if (user) return;
+        await fetch('/api/users/me', {
             method: 'GET',
             credentials: 'include',
         })
