@@ -2,10 +2,6 @@ package lkt.model;
 
 import org.postgresql.util.PGInterval;
 
-import java.time.Duration;
-import java.util.HashSet;
-import java.util.Set;
-
 public class Priority {
     private Integer ID;
     private int levelOfPriority;

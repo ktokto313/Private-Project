@@ -7,13 +7,10 @@ import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.servlet.http.HttpServletRequest;
 import lkt.model.User;
-import org.apache.logging.log4j.util.Base64Util;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import tools.jackson.databind.ObjectMapper;
 
 import java.time.Instant;
-import java.util.Base64;
 
 @Component
 public class JWTUtil {

@@ -4,11 +4,8 @@ import lkt.mapper.Mapper;
 import lkt.model.Attachment;
 import lkt.model.AttachmentType;
 import lkt.model.Comment;
-import lkt.model.Priority;
 import lkt.model.State;
 import lkt.model.Ticket;
-import lkt.model.TicketType;
-import lkt.model.User;
 import lkt.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -17,7 +14,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -244,10 +240,6 @@ public class TicketRepository implements ITicketRepository {
         }
         return attachments;
     }
-
-
-
-
 
     private String baseTicketQuery() {
         return """

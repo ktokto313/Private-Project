@@ -8,15 +8,13 @@ import org.springframework.stereotype.Service;
 import lkt.repository.IUserRepository;
 import lkt.util.JWTUtil;
 
-import java.util.List;
-
 @Service
 public class AuthService implements IAuthService {
     @Autowired
     private IUserRepository userRepository;
     // Create default bCrypt encoder with strength 10
     // TODO: tweak this to achieve ~1 sec verify time
-    private static BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+    private static final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     public String login(User user) {
         //TODO admin injection to test :pensive:

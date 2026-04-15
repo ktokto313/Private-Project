@@ -1,6 +1,5 @@
 package lkt.util;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;

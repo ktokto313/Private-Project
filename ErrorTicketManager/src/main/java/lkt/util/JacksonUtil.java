@@ -3,10 +3,7 @@ package lkt.util;
 import tools.jackson.databind.ObjectMapper;
 
 public class JacksonUtil {
-    private static ObjectMapper objectMapper = new ObjectMapper();
-
-    static {
-    }
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static String parseObjectToJSONString(Object object) {
         return objectMapper.writeValueAsString(object);

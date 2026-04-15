@@ -23,7 +23,7 @@ public class JWTFilter extends OncePerRequestFilter {
     private String cookieName;
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
         return request.getRequestURI().startsWith("/api/auth");
     }
 

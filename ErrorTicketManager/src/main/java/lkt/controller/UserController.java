@@ -1,6 +1,5 @@
 package lkt.controller;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.servlet.http.HttpServletRequest;
 import lkt.model.User;
 import lkt.util.JWTUtil;

@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lkt.util.Util;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 public class User implements Serializable {
     private Integer userID;

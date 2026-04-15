@@ -1,8 +1,5 @@
 package lkt.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class Department {
     private Integer ID;
     private String name;

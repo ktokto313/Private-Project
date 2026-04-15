@@ -7,8 +7,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import lkt.repository.IUserRepository;
 
-import java.util.List;
-
 @Service
 public class UserService implements IUserService {
     @Autowired
@@ -38,9 +36,6 @@ public class UserService implements IUserService {
     @Override
     public User getAccountByUsername(String username) {
         User foundUser = userRepository.findByUsername(username);
-        if (foundUser == null) {
-            return null;
-        }
         return foundUser;
     }
 

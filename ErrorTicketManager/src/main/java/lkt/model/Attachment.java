@@ -1,7 +1,5 @@
 package lkt.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class Attachment {
     private Integer id;
     private byte[] content;
