@@ -63,9 +63,8 @@ public class JWTUtil {
         DecodedJWT decodedJWT = (DecodedJWT) request.getAttribute(cookieName);
         try {
             Claim claim = decodedJWT.getClaim("user");
-            User user = JacksonUtil.parseJSONToObject(claim.asString(), User.class);
 
-            return user;
+            return JacksonUtil.parseJSONToObject(claim.asString(), User.class);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

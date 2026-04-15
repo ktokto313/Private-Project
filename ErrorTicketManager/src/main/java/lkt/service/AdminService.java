@@ -57,11 +57,32 @@ public class AdminService implements IAdminService {
     }
 
     @Override
-    public boolean changePriority(Integer priorityID, int levelOfPriority, String name, String timeToRespond, String timeToFinish) {
-        if (priorityID == null || name == null || name.isBlank() || timeToRespond == null || timeToRespond.isBlank() || timeToFinish == null || timeToFinish.isBlank()) {
+    public Priority createPriority(Priority priority) {
+        if (priority == null) {
+            return null;
+        }
+        if (priority.getName() == null || priority.getName().isBlank()) {
+            return null;
+        }
+        if (priority.getTimeToRespond() == null || priority.getTimeToRespond().isNull()){
+            return null;
+        }
+        if (priority.getTimeToFinish() == null || priority.getTimeToFinish().isNull()) {
+            return null;
+        }
+        priority.setName(priority.getName().trim());
+        return priorityRepository.insert(priority);
+    }
+
+    @Override
+    public boolean changePriority(Priority priority) {
+        if (priority.getID() == null || priority.getName() == null || priority.getName().isBlank() ||
+                priority.getTimeToRespond() == null || priority.getTimeToRespond().isNull()||
+                priority.getTimeToFinish() == null || priority.getTimeToFinish().isNull()) {
             return false;
         }
-        return priorityRepository.update(priorityID, levelOfPriority, name.trim(), timeToRespond.trim(), timeToFinish.trim());
+        priority.setName(priority.getName().trim());
+        return priorityRepository.update(priority);
     }
 
     @Override

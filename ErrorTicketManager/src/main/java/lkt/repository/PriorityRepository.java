@@ -43,7 +43,29 @@ public class PriorityRepository implements IPriorityRepository {
     }
 
     @Override
-    public boolean update(Integer priorityID, int levelOfPriority, String name, String timeToRespond, String timeToFinish) {
+    public Priority insert(Priority priority) {
+        String sql = """
+                insert into priorities (levelofpriority, name, timetorespond, timetofinish)
+                values (?, ?, ?::interval, ?::interval)
+                returning id, levelofpriority, name, timetorespond, timetofinish
+                """;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, priority.getLevelOfPriority());
+            preparedStatement.setString(2, priority.getName());
+            preparedStatement.setObject(3, priority.getTimeToRespond());
+            preparedStatement.setObject(4, priority.getTimeToFinish());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return mapper.mapPriority(resultSet);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public boolean update(Priority priority) {
         String sql = """
                 update priorities
                 set levelofpriority = ?,
@@ -53,11 +75,11 @@ public class PriorityRepository implements IPriorityRepository {
                 where id = ?
                 """;
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, levelOfPriority);
-            preparedStatement.setString(2, name);
-            preparedStatement.setObject(3, timeToRespond);
-            preparedStatement.setObject(4, timeToFinish);
-            preparedStatement.setInt(5, priorityID);
+            preparedStatement.setInt(1, priority.getLevelOfPriority());
+            preparedStatement.setString(2, priority.getName());
+            preparedStatement.setObject(3, priority.getTimeToRespond());
+            preparedStatement.setObject(4, priority.getTimeToFinish());
+            preparedStatement.setInt(5, priority.getID());
             return preparedStatement.executeUpdate() == 1;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -75,10 +97,5 @@ public class PriorityRepository implements IPriorityRepository {
             e.printStackTrace();
         }
         return false;
-    }
-
-    private Duration secondsToDuration(double seconds) {
-        long millis = Math.round(seconds * 1000);
-        return Duration.ofMillis(millis);
     }
 }

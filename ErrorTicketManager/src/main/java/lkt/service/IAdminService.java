@@ -13,7 +13,9 @@ public interface IAdminService {
 
     List<Priority> getPriorities();
 
-    boolean changePriority(Integer priorityID, int levelOfPriority, String name, String timeToRespond, String timeToFinish);
+    Priority createPriority(Priority priority);
+
+    boolean changePriority(Priority priority);
 
     boolean deletePriority(Integer priorityID);
 }

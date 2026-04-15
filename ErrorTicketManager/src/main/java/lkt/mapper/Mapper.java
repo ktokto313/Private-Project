@@ -77,6 +77,14 @@ public class Mapper {
         return ticketType;
     }
 
+    public TicketType mapTicketTypeRow(ResultSet resultSet) throws SQLException {
+        TicketType ticketType = new TicketType();
+        ticketType.setID(resultSet.getInt("id"));
+        ticketType.setTitle(resultSet.getString("title"));
+        ticketType.setDescription(resultSet.getString("description"));
+        return ticketType;
+    }
+
     public Priority mapPriority(ResultSet resultSet) throws SQLException {
         Priority priority = new Priority();
         priority.setID(resultSet.getInt("id"));

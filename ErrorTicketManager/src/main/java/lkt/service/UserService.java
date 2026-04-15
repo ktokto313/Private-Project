@@ -35,8 +35,7 @@ public class UserService implements IUserService {
 
     @Override
     public User getAccountByUsername(String username) {
-        User foundUser = userRepository.findByUsername(username);
-        return foundUser;
+        return userRepository.findByUsername(username);
     }
 
     @Override
