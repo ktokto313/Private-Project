@@ -28,6 +28,6 @@ public class AuthService implements IAuthService {
         if (foundUser == null ||
                 !bCryptPasswordEncoder.matches(user.getPassword(), foundUser.getPassword()))
             return null;
-        return JWTUtil.createToken(user);
+        return JWTUtil.createToken(foundUser.getUserNoPassword());
     }
 }
