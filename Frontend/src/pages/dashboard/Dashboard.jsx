@@ -7,27 +7,16 @@ import './Dashboard.css';
 
 import NewTicketForm from '../../components/NewTicketForm/NewTicketForm';
 
-const ticketList = [
-  {
-    id: 'TKT-001',
-    title: 'Cannot login to the system',
-    status: 0, // Open
-    priority: 'High',
-    assignee: 'John Doe',
-    createdDate: '2026-04-08'
-  }
-];
-
 const STATUS_MAP = {
-  0: 'Open',
-  1: 'In Progress',
-  2: 'Resolved',
-  3: 'Closed'
+  0: 'CREATED',
+  1: 'PROCESSING',
+  2: 'RESOLVED',
+  3: 'DONE'
 };
 
 
 export default function Dashboard() {
-  const [tickets, setTickets] = useState(ticketList);
+  const [tickets, setTickets] = useState([]);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [isNewTicketModalOpen, setIsNewTicketModalOpen] = useState(false);
@@ -72,15 +61,12 @@ export default function Dashboard() {
   };
 
   const fetchTicketsAPI = async () => {
-    fetch("/api/tickets", {
+    var res = await fetch("/api/tickets", {
       method: "GET"
     })
-      .then((res)=> {
-        setTickets(res.json());
-      })
-      .catch((e)=> {
-        console.log(e);
-      });
+    if (!res.ok) return;
+    res = await res.json();
+    setTickets(res);
   };
 
   const filteredTickets = useMemo(() => {
@@ -97,6 +83,29 @@ export default function Dashboard() {
     });
     return counts;
   }, [tickets]);
+
+  const dateToDuration = (dateString) => {
+    let ms = Date.parse(dateString);
+    if (isNaN(ms)) return '';
+
+    // If absolute date, get duration from now
+    if (ms > 946684800000) {
+      ms = Math.abs(Date.now() - ms);
+    }
+
+    const d = Math.floor(ms / 86400000);
+    const h = Math.floor((ms % 86400000) / 3600000);
+    const m = Math.floor((ms % 3600000) / 60000);
+    const s = Math.floor((ms % 60000) / 1000);
+
+    const parts = [];
+    if (d > 0) parts.push(`${d}d`);
+    if (h > 0) parts.push(`${h}h`);
+    if (m > 0) parts.push(`${m}m`);
+    if (s > 0) parts.push(`${s}s`);
+
+    return parts.join(' ') || '0s';
+  };
 
   const totalFilteredCount = filteredTickets.length;
 
@@ -156,17 +165,19 @@ export default function Dashboard() {
           </thead>
           <tbody>
             {filteredTickets.map(ticket => (
-              <tr key={ticket.id}>
-                <td>{ticket.id}</td>
+              <tr key={ticket.ID}>
+                <td>{ticket.ID}</td>
                 <td>{ticket.title}</td>
                 <td>
                   <span className={`status-badge status-${ticket.status}`}>
                     {STATUS_MAP[ticket.status]}
                   </span>
                 </td>
-                <td>{ticket.priority}</td>
-                <td>{ticket.assignee}</td>
-                <td>{ticket.createdDate}</td>
+                <td>{ticket.priority.name}</td>
+                <td>{ticket.assignee.username}</td>
+                <td>{
+                  new Date(Date.parse(ticket.timeCreated)).toDateString()
+                }</td>
               </tr>
             ))}
             {filteredTickets.length === 0 && (
