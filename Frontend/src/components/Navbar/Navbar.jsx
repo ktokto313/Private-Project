@@ -21,9 +21,11 @@ export default function Navbar() {
         <div className="nav-links">
           <Link to="/dashboard" className="nav-item">Dashboard</Link>
           {user.role === 'ADMIN' && (
-            <Link to="/admin" className="nav-item">Admin Dashboard</Link>
+            <>
+              <Link to="/admin" className="nav-item">Admin Dashboard</Link>
+              <Link to="/statistics" className="nav-item">Statistic</Link>
+            </>
           )}
-          <Link to="/statistics" className="nav-item">Statistic</Link>
         </div>
 
         <div className="nav-user">
