@@ -50,6 +50,8 @@ export default function TicketDetail() {
     const updateTicketState = async (value) => {
         const res = await fetch((user.role === 'ADMIN' ? "/api/admin/tickets/" : "/api/tickets/") + ticketID + "?state=" + value, {
             method: "PUT",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({})
         });
         if (res.ok) {
             console.log("Update success fetching data again!");

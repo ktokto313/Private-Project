@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lkt.model.Role;
 import lkt.model.User;
+import lkt.util.JWTUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -34,8 +35,7 @@ public class AdminFilter extends OncePerRequestFilter {
             ResponseUtil.writeErrorResponse(response, HttpStatus.UNAUTHORIZED);
             return;
         }
-
-        User user = decodedJWT.getClaim("user").as(User.class);
+        User user = JWTUtil.getUser(request);
         if (user == null || user.getRole() != Role.ADMIN) {
             ResponseUtil.writeErrorResponse(response, HttpStatus.FORBIDDEN);
             return;

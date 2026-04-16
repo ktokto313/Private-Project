@@ -121,6 +121,7 @@ public class AdminService implements IAdminService {
             if (!ticketStateMachineService.isTransitionAllowed(baseTicket.getState(), modifiedTicket.getState(), authenticatedUser, baseTicket)) {
                 return false;
             }
+            baseTicket.setState(modifiedTicket.getState());
         }
 
         return ticketRepository.updateTicket(ticketID, baseTicket);
