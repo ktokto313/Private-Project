@@ -71,13 +71,13 @@ public class TicketController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateTicketStatus(
+    public ResponseEntity<Void> updateTicket(
             @PathVariable("id") Integer ticketID,
-            @RequestParam String statusCode,
+            @RequestParam Ticket ticket,
             HttpServletRequest request
     ) {
         User authenticatedUser = getUser(request);
-        boolean updated = ticketService.updateTicketStatus(ticketID, statusCode, authenticatedUser);
+        boolean updated = ticketService.updateTicket(ticketID, ticket, authenticatedUser);
         if (!updated) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }

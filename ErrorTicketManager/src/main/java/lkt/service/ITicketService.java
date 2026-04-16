@@ -20,7 +20,7 @@ public interface ITicketService {
 
     Ticket viewTicket(Integer ticketID, User authenticatedUser);
 
-    boolean updateTicketStatus(Integer ticketID, String statusCode, User authenticatedUser);
+    boolean updateTicket(Integer ticketID, Ticket modifiedTicket, User authenticatedUser);
 
     boolean addAssignee(Integer ticketID, Integer userID, User authenticatedUser);
 

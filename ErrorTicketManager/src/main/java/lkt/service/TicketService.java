@@ -76,19 +76,22 @@ public class TicketService implements ITicketService {
     }
 
     @Override
-    public boolean updateTicketStatus(Integer ticketID, String statusCode, User authenticatedUser) {
+    public boolean updateTicket(Integer ticketID, Ticket modifiedTicket, User authenticatedUser) {
         if (!canManageTicket(authenticatedUser)) {
             return false;
         }
-        State state = Util.getStateFromString(statusCode);
-        if (ticketID == null || state == null) {
+        if (ticketID == null || modifiedTicket == null) {
             return false;
         }
-        Ticket ticket = viewTicket(ticketID, authenticatedUser);
-        if (ticket == null) {
+        Ticket baseTicket = viewTicket(ticketID, authenticatedUser);
+        if (baseTicket == null) {
             return false;
         }
-        return ticketRepository.updateTicketStatus(ticketID, state.toString());
+        // Only allow ticketType, assignees, priority change, purify data
+        baseTicket.setTicketType(modifiedTicket.getTicketType());
+        baseTicket.setAssignee(modifiedTicket.getAssignee());
+        baseTicket.setPriority(modifiedTicket.getPriority());
+        return ticketRepository.updateTicketStatus(ticketID, baseTicket);
     }
 
     @Override

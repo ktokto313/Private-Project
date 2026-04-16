@@ -19,7 +19,7 @@ public interface ITicketRepository {
 
     Ticket findAccessibleTicketByID(Integer ticketID, Integer userID, boolean includeAllTickets);
 
-    boolean updateTicketStatus(Integer ticketID, String statusCode);
+    boolean updateTicketStatus(Integer ticketID, Ticket ticket);
 
     boolean updateAssignee(Integer ticketID, Integer userID);
 

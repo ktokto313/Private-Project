@@ -127,21 +127,26 @@ public class TicketRepository implements ITicketRepository {
     }
 
     @Override
-    public boolean updateTicketStatus(Integer ticketID, String statusCode) {
+    public boolean updateTicketStatus(Integer ticketID, Ticket ticket) {
         String sql = """
                 update tickets
                 set state = ?::state,
                     timeprocessing = case when ? = 'PROCESSING' then coalesce(timeprocessing, ?) else timeprocessing end,
-                    timeresolved = case when ? in ('RESOLVED', 'DONE') then ? else timeresolved end
+                    timeresolved = case when ? in ('RESOLVED', 'DONE') then ? else timeresolved end,
+                    assignee = ?,
+                    priority = ?
                 where id = ?
                 """;
         LocalDateTime now = LocalDateTime.now();
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setString(1, statusCode);
-            preparedStatement.setString(2, statusCode);
+            String ticketState = ticket.getState().toString();
+            preparedStatement.setString(1, ticketState);
+            preparedStatement.setString(2, ticketState);
             preparedStatement.setTimestamp(3, Timestamp.valueOf(now));
-            preparedStatement.setString(4, statusCode);
+            preparedStatement.setString(4, ticketState);
             preparedStatement.setTimestamp(5, Timestamp.valueOf(now));
+            preparedStatement.setInt(6, ticket.getAssignee().getUserID());
+            preparedStatement.setInt(7, ticket.getPriority().getID());
             preparedStatement.setInt(6, ticketID);
             return preparedStatement.executeUpdate() == 1;
         } catch (SQLException e) {
