@@ -11,8 +11,6 @@ const STATUS_MAP = {
   DONE: 3
 };
 
-const navigate = useNavigate(); 
-
 export default function Dashboard() {
   const [tickets, setTickets] = useState([]);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -20,6 +18,7 @@ export default function Dashboard() {
   const [isNewTicketModalOpen, setIsNewTicketModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const filterDropdownRef = useRef(null);
+  const navigate = useNavigate(); 
 
   const PAGE_SIZE = 20;
 
@@ -80,29 +79,6 @@ export default function Dashboard() {
     });
     return counts;
   }, [tickets]);
-
-  const dateToDuration = (dateString) => {
-    let ms = Date.parse(dateString);
-    if (isNaN(ms)) return '';
-
-    // If absolute date, get duration from now
-    if (ms > 946684800000) {
-      ms = Math.abs(Date.now() - ms);
-    }
-
-    const d = Math.floor(ms / 86400000);
-    const h = Math.floor((ms % 86400000) / 3600000);
-    const m = Math.floor((ms % 3600000) / 60000);
-    const s = Math.floor((ms % 60000) / 1000);
-
-    const parts = [];
-    if (d > 0) parts.push(`${d}d`);
-    if (h > 0) parts.push(`${h}h`);
-    if (m > 0) parts.push(`${m}m`);
-    if (s > 0) parts.push(`${s}s`);
-
-    return parts.join(' ') || '0s';
-  };
 
   const ticketOnClick = (ticketID) => {
     navigate("/ticket/:"+ticketID);

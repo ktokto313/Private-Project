@@ -1,168 +1,200 @@
 import React, { useState, useEffect } from 'react';
 import './TicketDetail.css';
+import { useAuth } from '../../context/AuthContext';
+import { useParams } from 'react-router-dom';
 
-export default function TicketDetail({
-  params,
-}) {
-  // Mock ticket state
-  const [ticket, setTicket] = useState({
-    id: ticketId || 1,
-    title: 'Example Ticket Title',
-    priority: { id: 1, name: 'High' },
-    state: 'PROCESSING',
-    type: { id: 1, name: 'Bug' },
-    assignee: { id: 2, username: 'dev_user' },
-    creator: { id: 1, username: 'creator_user' }
-  });
+export default function TicketDetail() {
+    const { user } = useAuth();
+    const { id } = useParams();
+    const ticketID = id.substring(1);
 
-  const [comment, setComment] = useState('');
+    const [ticket, setTicket] = useState();
+    const [comment, setComment] = useState('');
+    const [priorities, setPriorities] = useState();
+    const [ticketTypes, setTicketTypes] = useState();
 
-  // Fallback map
-  const priorities = [{id: 1, name: 'High'}, {id: 2, name: 'Low'}];
-  const types = [{id: 1, name: 'Bug'}, {id: 2, name: 'Feature'}];
-  const assignees = [{id: 2, username: 'dev_user'}, {id: 3, username: 'other_user'}];
+    // Fallback map
+    const assignees = [{ userID: 2, username: 'dev_user' }, { userID: 3, username: 'other_user' }];
 
-  // Mock current user if not passed
-  const user = currentUser || { id: 2, username: 'dev_user' };
+    const isCreator = ticket ? user.ID === ticket.creator.ID : false;
+    const isAssignee = ticket ? user.ID === ticket.assignee?.ID : false;
+    const isResolved = ticket ? ticket.state === 'RESOLVED' : false;
 
-  const isCreator = user.id === ticket.creator.id;
-  const isAssignee = user.id === ticket.assignee?.id;
-  const isResolved = ticket.state === 'RESOLVED';
+    const fetchTicketDetail = async () => {
+        var res = await fetch("/api/tickets/" + ticketID, {
 
-  const updateTicketAPI = async (field, value) => {
-    // API Call Stub
-    console.log(`API update -> ${field}:`, value);
-    setTicket(prev => ({ ...prev, [field]: value }));
-  };
+        });
+        if (!res.ok) return;
+        res = await res.json();
+        setTicket(res);
+    }
 
-  const handlePostComment = () => {
-    console.log("Post comment:", comment);
-    setComment('');
-  };
+    const fetchTicketTypes = async () => {
+        const res = await fetch("/api/ticket-type", {
+            method: "GET"
+        })
+        if (!res.ok) return;
+        const resp = await res.json();
+        setTicketTypes(resp);
+    };
 
-  const handleAddAsResolve = () => {
-    console.log("Post comment & resolve:", comment);
-    updateTicketAPI('state', 'RESOLVED');
-    setComment('');
-  };
+    const fetchPriorities = async () => {
+        const res = await fetch("/api/priorities", {
+            method: "GET"
+        })
+        if (!res.ok) return;
+        const resp = await res.json();
+        setPriorities(resp);
+    };
 
-  const handleMarkResolved = () => { // "If current user is assignee and ticket resolved" per prompt, handling logically 
-    updateTicketAPI('state', 'RESOLVED');
-  };
+    const updateTicketState = async (field, value) => {
+        const data = new URLSearchParams();
+        data.append("statusCode", value);
+        const res = await fetch("/api/tickets/" + ticketID, {
+            method: "PUT",
+            body: data
+        });
+        if (res.ok) {
+            console.log("Update success");
+        }
+    };
 
-  const handleAccept = () => updateTicketAPI('state', 'DONE');
-  const handleDeny = () => updateTicketAPI('state', 'PROCESSING');
+    const handlePostComment = () => {
+        console.log("Post comment:", comment);
+        setComment('');
+    };
 
-  return (
-    <div className="ticket-detail-container">
-      <div className="split-layout">
-        {/* Left Column */}
-        <div className="left-panel">
-          <div className="ticket-header">
-            <h1 className="ticket-title">{ticket.title}</h1>
-            <div className="ticket-badges">
-              <span className={`badge priority-${ticket.priority.name.toLowerCase()}`}>{ticket.priority.name}</span>
-              <span className={`badge state-${ticket.state.toLowerCase()}`}>{ticket.state}</span>
+    const handleAddAsResolve = () => {
+        console.log("Post comment & resolve:", comment);
+        updateTicketState('state', 'RESOLVED');
+        setComment('');
+    };
+
+    const handleMarkResolved = () => { // "If current user is assignee and ticket resolved" per prompt, handling logically 
+        updateTicketState('state', 'RESOLVED');
+    };
+
+    const handleAccept = () => updateTicketState('state', 'DONE');
+    const handleDeny = () => updateTicketState('state', 'PROCESSING');
+
+    useEffect(() => {
+        fetchTicketDetail();
+        fetchTicketTypes();
+        fetchPriorities();
+    }, []);
+
+    if (!ticket || !priorities || !ticketTypes) return;
+
+    return (
+        <div className="ticket-detail-container">
+            <div className="split-layout">
+                {/* Left Column */}
+                <div className="left-panel">
+                    <div className="ticket-header">
+                        <h1 className="ticket-title">{ticket.title}</h1>
+                        <div className="ticket-badges">
+                            <span className={`badge priority-${ticket.priority.name.toLowerCase()}`}>{ticket.priority.name}</span>
+                            <span className={`badge state-${ticket.state.toLowerCase()}`}>{ticket.state}</span>
+                        </div>
+                    </div>
+
+                    <div className="comment-section">
+                        <textarea
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}
+                            placeholder="Add a comment..."
+                            className="comment-box"
+                        />
+                        <div className="comment-actions">
+                            <button className="btn primary-btn" onClick={handlePostComment}>Add</button>
+                            <button className="btn secondary-btn" onClick={handleAddAsResolve}>Add as Resolve</button>
+                        </div>
+                    </div>
+
+                    <div className="resolution-section">
+                        {isResolved && isCreator && (
+                            <div className="creator-actions">
+                                <button className="btn success-btn" onClick={handleAccept}>Accept</button>
+                                <button className="btn danger-btn" onClick={handleDeny}>Deny</button>
+                            </div>
+                        )}
+                        {/* Logic fallback: show if assignee. Added condition for flexibility. */}
+                        {isAssignee && !isResolved && (
+                            <div className="assignee-actions">
+                                <button className="btn warning-btn" onClick={handleMarkResolved}>Mark as Resolved</button>
+                            </div>
+                        )}
+                        {isAssignee && isResolved && (
+                            <div className="assignee-actions">
+                                <button className="btn warning-btn" onClick={handleMarkResolved}>Mark as Resolved</button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* Right Column */}
+                <div className="right-panel">
+
+                    <div className="property-group">
+                        <div className="property-header">
+                            <label>Assignee</label>
+                            <a href="#" className="property-link" onClick={() => updateTicketState('assignee', user)}>Add</a>
+                        </div>
+                        <select
+                            className="property-select"
+                            value={ticket.assignee?.userID || ''}
+                            onChange={(e) => {
+                                const sel = assignees.find(a => a.userID === parseInt(e.target.value));
+                                updateTicketState('assignee', sel || null);
+                            }}
+                        >
+                            <option value="">No one - assign self</option>
+                            {assignees.map(a => (
+                                <option key={a.userID} value={a.userID}>{a.username}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="property-group">
+                        <div className="property-header">
+                            <label>Priority</label>
+                            <a href="#" className="property-link">Change</a>
+                        </div>
+                        <select
+                            className="property-select"
+                            value={ticket.priority.ID}
+                            onChange={(e) => {
+                                const sel = priorities.find(p => p.ID === parseInt(e.target.value));
+                                updateTicketState('priority', sel);
+                            }}
+                        >
+                            {priorities.map(p => (
+                                <option key={p.ID} value={p.ID}>{p.name}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="property-group">
+                        <div className="property-header">
+                            <label>Type</label>
+                            <a href="#" className="property-link">Add</a>
+                        </div>
+                        <select
+                            className="property-select"
+                            value={ticket.ticketType.ID}
+                            onChange={(e) => {
+                                const sel = ticketTypes.find(t => t.ID === parseInt(e.target.value));
+                                updateTicketState('type', sel);
+                            }}
+                        >
+                            {ticketTypes.map(t => (
+                                <option key={t.ID} value={t.ID}>{t.title}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                </div>
             </div>
-          </div>
-
-          <div className="comment-section">
-            <textarea 
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              placeholder="Add a comment..."
-              className="comment-box"
-            />
-            <div className="comment-actions">
-              <button className="btn primary-btn" onClick={handlePostComment}>Add</button>
-              <button className="btn secondary-btn" onClick={handleAddAsResolve}>Add as Resolve</button>
-            </div>
-          </div>
-
-          <div className="resolution-section">
-            {isResolved && isCreator && (
-              <div className="creator-actions">
-                <button className="btn success-btn" onClick={handleAccept}>Accept</button>
-                <button className="btn danger-btn" onClick={handleDeny}>Deny</button>
-              </div>
-            )}
-            {/* Logic fallback: show if assignee. Added condition for flexibility. */}
-            {isAssignee && !isResolved && (
-              <div className="assignee-actions">
-                <button className="btn warning-btn" onClick={handleMarkResolved}>Mark as Resolved</button>
-              </div>
-            )}
-            {isAssignee && isResolved && (
-               <div className="assignee-actions">
-                 <button className="btn warning-btn" onClick={handleMarkResolved}>Mark as Resolved</button>
-               </div>
-            )}
-          </div>
         </div>
-
-        {/* Right Column */}
-        <div className="right-panel">
-          
-          <div className="property-group">
-            <div className="property-header">
-              <label>Assignee</label>
-              <a href="#" className="property-link" onClick={() => updateTicketAPI('assignee', user)}>Add</a>
-            </div>
-            <select 
-              className="property-select"
-              value={ticket.assignee?.id || ''}
-              onChange={(e) => {
-                const sel = assignees.find(a => a.id === parseInt(e.target.value));
-                updateTicketAPI('assignee', sel || null);
-              }}
-            >
-              <option value="">No one - assign self</option>
-              {assignees.map(a => (
-                <option key={a.id} value={a.id}>{a.username}</option>
-              ))}
-            </select>
-          </div>
-
-          <div className="property-group">
-            <div className="property-header">
-              <label>Priority</label>
-              <a href="#" className="property-link">Change</a>
-            </div>
-            <select 
-              className="property-select"
-              value={ticket.priority.id}
-              onChange={(e) => {
-                const sel = priorities.find(p => p.id === parseInt(e.target.value));
-                updateTicketAPI('priority', sel);
-              }}
-            >
-               {priorities.map(p => (
-                <option key={p.id} value={p.id}>{p.name}</option>
-              ))}
-            </select>
-          </div>
-
-          <div className="property-group">
-            <div className="property-header">
-              <label>Type</label>
-              <a href="#" className="property-link">Add</a>
-            </div>
-            <select 
-              className="property-select"
-              value={ticket.type.id}
-              onChange={(e) => {
-                const sel = types.find(t => t.id === parseInt(e.target.value));
-                updateTicketAPI('type', sel);
-              }}
-            >
-              {types.map(t => (
-                <option key={t.id} value={t.id}>{t.name}</option>
-              ))}
-            </select>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  );
+    );
 }
