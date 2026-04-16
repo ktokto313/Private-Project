@@ -22,7 +22,7 @@ export default function TicketDetail() {
 
     const fetchTicketDetail = async () => {
         var res = await fetch("/api/tickets/" + ticketID, {
-
+            method: "GET"
         });
         if (!res.ok) return;
         res = await res.json();
@@ -48,26 +48,47 @@ export default function TicketDetail() {
     };
 
     const updateTicketState = async (field, value) => {
+        switch (field) {
+            case "state":
+                ticket.state = value;
+                break;
+            case "assignee":
+                ticket.assignee.userID = value;
+                break;
+            case "priority":
+                ticket.priority.ID = value;
+                break;
+        }
+        
         const data = new URLSearchParams();
-        data.append("statusCode", value);
+        data.append("ticket", ticket);
         const res = await fetch("/api/tickets/" + ticketID, {
             method: "PUT",
             body: data
         });
         if (res.ok) {
-            console.log("Update success");
+            console.log("Update success fetching data again!");
+            fetchTicketDetail();
         }
     };
 
-    const handlePostComment = () => {
-        console.log("Post comment:", comment);
-        setComment('');
+    const handlePostComment = async () => {
+        const data = new URLSearchParams();
+        data.append("detail", comment);
+        const res = await fetch("/api/tickets/" + ticketID + "/comments", {
+            method: "POST",
+            body: data
+        });
+        if (res.ok) {
+            console.log("Posted comment:", comment);
+            setComment('');
+        }
     };
 
     const handleAddAsResolve = () => {
+        handlePostComment();
         console.log("Post comment & resolve:", comment);
         updateTicketState('state', 'RESOLVED');
-        setComment('');
     };
 
     const handleMarkResolved = () => { // "If current user is assignee and ticket resolved" per prompt, handling logically 
@@ -118,13 +139,7 @@ export default function TicketDetail() {
                                 <button className="btn danger-btn" onClick={handleDeny}>Deny</button>
                             </div>
                         )}
-                        {/* Logic fallback: show if assignee. Added condition for flexibility. */}
                         {isAssignee && !isResolved && (
-                            <div className="assignee-actions">
-                                <button className="btn warning-btn" onClick={handleMarkResolved}>Mark as Resolved</button>
-                            </div>
-                        )}
-                        {isAssignee && isResolved && (
                             <div className="assignee-actions">
                                 <button className="btn warning-btn" onClick={handleMarkResolved}>Mark as Resolved</button>
                             </div>
