@@ -31,7 +31,7 @@ public class AuthController {
             ResponseCookie cookie = CookieUtil.makeCookieFromJWT(jwt);
             return ResponseEntity.ok()
                     .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                    .body(user);
+                    .body(user.getUserNoPassword());
         } catch (Exception e) {
             //TODO remove debug
             e.printStackTrace();

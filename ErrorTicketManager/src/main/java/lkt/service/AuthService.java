@@ -28,6 +28,9 @@ public class AuthService implements IAuthService {
         if (foundUser == null ||
                 !bCryptPasswordEncoder.matches(user.getPassword(), foundUser.getPassword()))
             return null;
+        user.setUserID(foundUser.getUserID());
+        user.setRole(foundUser.getRole());
+        user.setDepartment(foundUser.getDepartment());
         return JWTUtil.createToken(foundUser.getUserNoPassword());
     }
 }
