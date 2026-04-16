@@ -16,6 +16,7 @@ import lkt.util.ResponseUtil;
 
 import java.io.IOException;
 
+@Order(2)
 @Component
 public class AdminFilter extends OncePerRequestFilter {
     @Value("${jwt.cookie.name}")
@@ -27,7 +28,6 @@ public class AdminFilter extends OncePerRequestFilter {
     }
 
     @Override
-    @Order(2)
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         DecodedJWT decodedJWT = (DecodedJWT) request.getAttribute(cookieName);
         if (decodedJWT == null) {
