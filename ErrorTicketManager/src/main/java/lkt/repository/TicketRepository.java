@@ -127,7 +127,7 @@ public class TicketRepository implements ITicketRepository {
     }
 
     @Override
-    public boolean updateTicketStatus(Integer ticketID, Ticket ticket) {
+    public boolean updateTicket(Integer ticketID, Ticket ticket) {
         String sql = """
                 update tickets
                 set state = ?::state,

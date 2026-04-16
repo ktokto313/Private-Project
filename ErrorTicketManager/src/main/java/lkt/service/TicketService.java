@@ -3,7 +3,6 @@ package lkt.service;
 import lkt.model.*;
 import lkt.repository.ITicketRepository;
 import lkt.repository.IUserRepository;
-import lkt.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -87,11 +86,22 @@ public class TicketService implements ITicketService {
         if (baseTicket == null) {
             return false;
         }
-        // Only allow ticketType, assignees, priority change, purify data
+        // Only allow ticketType, assignees, priority, state change, purify data
         baseTicket.setTicketType(modifiedTicket.getTicketType());
         baseTicket.setAssignee(modifiedTicket.getAssignee());
         baseTicket.setPriority(modifiedTicket.getPriority());
-        return ticketRepository.updateTicketStatus(ticketID, baseTicket);
+        if (!baseTicket.getState().equals(modifiedTicket.getState())) {
+            // If user accept or deny a ticket, make sure it's the creator
+            if (modifiedTicket.getState().equals(State.DONE) ||
+                    (baseTicket.getState().equals(State.RESOLVED) && baseTicket.getState().equals(State.PROCESSING))) {
+                if (baseTicket.getCreator().getUserID().equals(authenticatedUser.getUserID())) {
+                    baseTicket.setState(modifiedTicket.getState());
+                } else {
+                    return false;
+                }
+            }
+        }
+        return ticketRepository.updateTicket(ticketID, baseTicket);
     }
 
     @Override
