@@ -1,5 +1,10 @@
 package lkt.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import lkt.model.Ticket;
+import lkt.model.User;
+import lkt.util.JWTUtil;
+import lkt.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -87,6 +92,21 @@ public class AdminController {
         boolean deleted = adminService.deletePriority(priorityID);
         if (!deleted) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/tickets/{ticket-id}")
+    public ResponseEntity<Void> updateTicket(
+            @PathVariable("ticket-id") Integer ticketID,
+            @RequestBody Ticket ticket,
+            @RequestParam(value="state") String string,
+            HttpServletRequest request) {
+        User currentUser = JWTUtil.getUser(request);
+        ticket.setState(Util.getStateFromString(string));
+        boolean updated = adminService.updateTicket(ticketID, ticket, currentUser);
+        if (!updated) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         return ResponseEntity.noContent().build();
     }

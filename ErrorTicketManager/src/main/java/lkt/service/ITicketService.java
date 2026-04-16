@@ -1,5 +1,6 @@
 package lkt.service;
 
+import lkt.model.State;
 import lkt.model.Ticket;
 import lkt.model.User;
 
@@ -20,7 +21,7 @@ public interface ITicketService {
 
     Ticket viewTicket(Integer ticketID, User authenticatedUser);
 
-    boolean updateTicket(Integer ticketID, Ticket modifiedTicket, User authenticatedUser);
+    boolean updateTicketState(Integer ticketID, State state, User authenticatedUser);
 
     boolean addAssignee(Integer ticketID, Integer userID, User authenticatedUser);
 

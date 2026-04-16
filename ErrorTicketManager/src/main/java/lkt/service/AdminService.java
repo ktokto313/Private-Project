@@ -1,5 +1,8 @@
 package lkt.service;
 
+import lkt.model.State;
+import lkt.model.Ticket;
+import lkt.repository.ITicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,11 @@ public class AdminService implements IAdminService {
 
     @Autowired
     private IPriorityRepository priorityRepository;
+
+    @Autowired
+    private ITicketRepository ticketRepository;
+    @Autowired
+    private TicketStateMachineService ticketStateMachineService;
 
     private static final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
@@ -91,5 +99,30 @@ public class AdminService implements IAdminService {
             return false;
         }
         return priorityRepository.deleteByID(priorityID);
+    }
+
+    @Override
+    public boolean updateTicket(Integer ticketID, Ticket modifiedTicket, User authenticatedUser) {
+        if (ticketID == null || modifiedTicket == null) {
+            return false;
+        }
+        Ticket baseTicket = ticketRepository.findAccessibleTicketByID(ticketID, authenticatedUser.getUserID(), true);
+        if (baseTicket == null) {
+            return false;
+        }
+        // Only allow ticketType, assignees, priority, state change, purify data
+        if (modifiedTicket.getTicketType() != null)
+            baseTicket.setTicketType(modifiedTicket.getTicketType());
+        if (modifiedTicket.getAssignee() != null)
+            baseTicket.setAssignee(modifiedTicket.getAssignee());
+        if (modifiedTicket.getPriority() != null)
+            baseTicket.setPriority(modifiedTicket.getPriority());
+        if (modifiedTicket.getState() != null) {
+            if (!ticketStateMachineService.isTransitionAllowed(baseTicket.getState(), modifiedTicket.getState(), authenticatedUser, baseTicket)) {
+                return false;
+            }
+        }
+
+        return ticketRepository.updateTicket(ticketID, baseTicket);
     }
 }

@@ -147,7 +147,7 @@ public class TicketRepository implements ITicketRepository {
             preparedStatement.setTimestamp(5, Timestamp.valueOf(now));
             preparedStatement.setInt(6, ticket.getAssignee().getUserID());
             preparedStatement.setInt(7, ticket.getPriority().getID());
-            preparedStatement.setInt(6, ticketID);
+            preparedStatement.setInt(8, ticketID);
             return preparedStatement.executeUpdate() == 1;
         } catch (SQLException e) {
             e.printStackTrace();

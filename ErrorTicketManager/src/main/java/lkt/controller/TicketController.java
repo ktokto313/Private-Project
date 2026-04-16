@@ -1,20 +1,16 @@
 package lkt.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lkt.model.State;
 import lkt.model.Ticket;
 import lkt.model.User;
 import lkt.service.ITicketService;
 import lkt.util.JWTUtil;
+import lkt.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -73,11 +69,12 @@ public class TicketController {
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateTicket(
             @PathVariable("id") Integer ticketID,
-            @RequestParam Ticket ticket,
+            @RequestParam(value="state") String string,
             HttpServletRequest request
     ) {
+        State state = Util.getStateFromString(string);
         User authenticatedUser = getUser(request);
-        boolean updated = ticketService.updateTicket(ticketID, ticket, authenticatedUser);
+        boolean updated = ticketService.updateTicketState(ticketID, state, authenticatedUser);
         if (!updated) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -101,7 +98,7 @@ public class TicketController {
     @PostMapping("/{id}/comments")
     public ResponseEntity<Void> addComment(
             @PathVariable("id") Integer ticketID,
-            @RequestParam(value = "detail", required = false) String detail,
+            @RequestParam(value = "detail") String detail,
             @RequestParam(value = "attachedFile", required = false) MultipartFile attachedFile,
             HttpServletRequest request
     ) throws IOException {

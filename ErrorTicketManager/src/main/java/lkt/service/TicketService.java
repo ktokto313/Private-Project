@@ -17,6 +17,9 @@ public class TicketService implements ITicketService {
     @Autowired
     private IUserRepository userRepository;
 
+    @Autowired
+    private TicketStateMachineService ticketStateMachineService;
+
     @Override
     public boolean createTicket(
             String title,
@@ -75,32 +78,18 @@ public class TicketService implements ITicketService {
     }
 
     @Override
-    public boolean updateTicket(Integer ticketID, Ticket modifiedTicket, User authenticatedUser) {
-        if (!canManageTicket(authenticatedUser)) {
-            return false;
-        }
-        if (ticketID == null || modifiedTicket == null) {
+    public boolean updateTicketState(Integer ticketID, State state, User authenticatedUser) {
+        if (ticketID == null || state == null) {
             return false;
         }
         Ticket baseTicket = viewTicket(ticketID, authenticatedUser);
         if (baseTicket == null) {
             return false;
         }
-        // Only allow ticketType, assignees, priority, state change, purify data
-        baseTicket.setTicketType(modifiedTicket.getTicketType());
-        baseTicket.setAssignee(modifiedTicket.getAssignee());
-        baseTicket.setPriority(modifiedTicket.getPriority());
-        if (!baseTicket.getState().equals(modifiedTicket.getState())) {
-            // If user accept or deny a ticket, make sure it's the creator
-            if (modifiedTicket.getState().equals(State.DONE) ||
-                    (baseTicket.getState().equals(State.RESOLVED) && baseTicket.getState().equals(State.PROCESSING))) {
-                if (baseTicket.getCreator().getUserID().equals(authenticatedUser.getUserID())) {
-                    baseTicket.setState(modifiedTicket.getState());
-                } else {
-                    return false;
-                }
-            }
+        if (!ticketStateMachineService.isTransitionAllowed(baseTicket.getState(), state, authenticatedUser, baseTicket)) {
+            return false;
         }
+        baseTicket.setState(state);
         return ticketRepository.updateTicket(ticketID, baseTicket);
     }
 
@@ -157,7 +146,7 @@ public class TicketService implements ITicketService {
     }
 
     private boolean canManageTicket(User user) {
-        return canAccessAllTickets(user) && user.getRole() == Role.IT;
+        return canAccessAllTickets(user);
     }
 
     private boolean isBlank(String value) {

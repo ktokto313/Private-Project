@@ -16,8 +16,8 @@ export default function TicketDetail() {
     // Fallback map
     const assignees = [{ userID: 2, username: 'dev_user' }, { userID: 3, username: 'other_user' }];
 
-    const isCreator = ticket ? user.ID === ticket.creator.ID : false;
-    const isAssignee = ticket ? user.ID === ticket.assignee?.ID : false;
+    const isCreator = ticket ? user.userID === ticket.creator.userID : false;
+    const isAssignee = ticket ? user.userID === ticket.assignee.userID : false;
     const isResolved = ticket ? ticket.state === 'RESOLVED' : false;
 
     const fetchTicketDetail = async () => {
@@ -47,24 +47,37 @@ export default function TicketDetail() {
         setPriorities(resp);
     };
 
-    const updateTicketState = async (field, value) => {
+    const updateTicketState = async (value) => {
+        const res = await fetch((user.role === 'ADMIN' ? "/api/admin/tickets/" : "/api/tickets/") + ticketID + "?state=" + value, {
+            method: "PUT",
+        });
+        if (res.ok) {
+            console.log("Update success fetching data again!");
+            fetchTicketDetail();
+        }
+    };
+
+    const adminTicketUpdate = async (field, value) => {
+        const tempTicket = {};
         switch (field) {
-            case "state":
-                ticket.state = value;
-                break;
             case "assignee":
-                ticket.assignee.userID = value;
+                tempTicket.assignee = { userID: value };
                 break;
             case "priority":
-                ticket.priority.ID = value;
+                tempTicket.priority = { ID: value };
+                break;
+            case "ticketType":
+                tempTicket.ticketType = { ID: value };
                 break;
         }
         
-        const data = new URLSearchParams();
-        data.append("ticket", ticket);
-        const res = await fetch("/api/tickets/" + ticketID, {
+        // const data = new URLSearchParams();
+        console.log(JSON.stringify(tempTicket));
+        // data.append("ticket", JSON.stringify(tempTicket));
+        const res = await fetch("/api/admin/tickets/" + ticketID, {
             method: "PUT",
-            body: data
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(tempTicket)
         });
         if (res.ok) {
             console.log("Update success fetching data again!");
@@ -73,8 +86,10 @@ export default function TicketDetail() {
     };
 
     const handlePostComment = async () => {
+        const tempComment = {};
+        tempComment.detail = comment;
         const data = new URLSearchParams();
-        data.append("detail", comment);
+        data.append("comment", tempComment);
         const res = await fetch("/api/tickets/" + ticketID + "/comments", {
             method: "POST",
             body: data
@@ -88,15 +103,15 @@ export default function TicketDetail() {
     const handleAddAsResolve = () => {
         handlePostComment();
         console.log("Post comment & resolve:", comment);
-        updateTicketState('state', 'RESOLVED');
+        updateTicketState('RESOLVED');
     };
 
     const handleMarkResolved = () => { // "If current user is assignee and ticket resolved" per prompt, handling logically 
-        updateTicketState('state', 'RESOLVED');
+        updateTicketState('RESOLVED');
     };
 
-    const handleAccept = () => updateTicketState('state', 'DONE');
-    const handleDeny = () => updateTicketState('state', 'PROCESSING');
+    const handleAccept = () => updateTicketState('DONE');
+    const handleDeny = () => updateTicketState('PROCESSING');
 
     useEffect(() => {
         fetchTicketDetail();
@@ -133,13 +148,13 @@ export default function TicketDetail() {
                     </div>
 
                     <div className="resolution-section">
-                        {isResolved && isCreator && (
+                        {isResolved && (isCreator || user.role === 'ADMIN') && (
                             <div className="creator-actions">
                                 <button className="btn success-btn" onClick={handleAccept}>Accept</button>
                                 <button className="btn danger-btn" onClick={handleDeny}>Deny</button>
                             </div>
                         )}
-                        {isAssignee && !isResolved && (
+                        {(isAssignee || user.role === 'ADMIN') && !isResolved && (
                             <div className="assignee-actions">
                                 <button className="btn warning-btn" onClick={handleMarkResolved}>Mark as Resolved</button>
                             </div>
@@ -153,18 +168,14 @@ export default function TicketDetail() {
                     <div className="property-group">
                         <div className="property-header">
                             <label>Assignee</label>
-                            <a href="#" className="property-link" onClick={() => updateTicketState('assignee', user)}>Add</a>
+                            {user.role === 'ADMIN' && <a href="#" className="property-link" onClick={() => adminTicketUpdate('assignee', user)}>Add</a>}
                         </div>
                         <select
                             className="property-select"
-                            value={ticket.assignee?.userID || ''}
-                            onChange={(e) => {
-                                const sel = assignees.find(a => a.userID === parseInt(e.target.value));
-                                updateTicketState('assignee', sel || null);
-                            }}
-                        >
-                            <option value="">No one - assign self</option>
-                            {assignees.map(a => (
+                            value={ticket.assignee.userID} 
+                            onChange={(e) => adminTicketUpdate('assignee', parseInt(e.target.value))}>
+                            <option key={ticket.assignee.userID} value={ticket.assignee.userID}>{ticket.assignee.username}</option>
+                            {user.role === 'ADMIN' && assignees.filter(a => a.userID !== ticket.assignee.userID).map(a => (
                                 <option key={a.userID} value={a.userID}>{a.username}</option>
                             ))}
                         </select>
@@ -173,17 +184,15 @@ export default function TicketDetail() {
                     <div className="property-group">
                         <div className="property-header">
                             <label>Priority</label>
-                            <a href="#" className="property-link">Change</a>
+                            {user.role === 'ADMIN' && <a href="#" className="property-link">Change</a>}
                         </div>
                         <select
                             className="property-select"
                             value={ticket.priority.ID}
-                            onChange={(e) => {
-                                const sel = priorities.find(p => p.ID === parseInt(e.target.value));
-                                updateTicketState('priority', sel);
-                            }}
+                            onChange={(e) => adminTicketUpdate('priority', parseInt(e.target.value))}
                         >
-                            {priorities.map(p => (
+                            <option key={ticket.priority.ID} value={ticket.priority.ID}>{ticket.priority.name}</option>
+                            {user.role === 'ADMIN' && priorities.filter(p => p.ID !== ticket.priority.ID).map(p => (
                                 <option key={p.ID} value={p.ID}>{p.name}</option>
                             ))}
                         </select>
@@ -192,17 +201,15 @@ export default function TicketDetail() {
                     <div className="property-group">
                         <div className="property-header">
                             <label>Type</label>
-                            <a href="#" className="property-link">Add</a>
+                            {user.role === 'ADMIN' && <a href="#" className="property-link">Add</a>}
                         </div>
                         <select
                             className="property-select"
                             value={ticket.ticketType.ID}
-                            onChange={(e) => {
-                                const sel = ticketTypes.find(t => t.ID === parseInt(e.target.value));
-                                updateTicketState('type', sel);
-                            }}
+                            onChange={(e) => adminTicketUpdate('ticketType', parseInt(e.target.value))}
                         >
-                            {ticketTypes.map(t => (
+                            <option key={ticket.ticketType.ID} value={ticket.ticketType.ID}>{ticket.ticketType.title}</option>
+                            {user.role === 'ADMIN' && ticketTypes.filter(t => t.ID !== ticket.ticketType.ID).map(t => (
                                 <option key={t.ID} value={t.ID}>{t.title}</option>
                             ))}
                         </select>
