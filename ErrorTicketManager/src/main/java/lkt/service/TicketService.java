@@ -143,11 +143,11 @@ public class TicketService implements ITicketService {
     }
 
     private boolean canAccessAllTickets(User user) {
-        return user != null && (user.getRole() == Role.ADMIN || user.getRole() == Role.IT);
+        return user != null && (user.getRole() == Role.ADMIN);
     }
 
     private boolean canManageTicket(User user) {
-        return canAccessAllTickets(user);
+        return canAccessAllTickets(user) && user.getRole() == Role.IT;
     }
 
     private boolean isBlank(String value) {
