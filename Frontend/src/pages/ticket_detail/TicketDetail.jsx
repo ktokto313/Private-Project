@@ -10,11 +10,9 @@ export default function TicketDetail() {
 
     const [ticket, setTicket] = useState();
     const [comment, setComment] = useState('');
+    const [assignees, setAssignees] = useState([]);
     const [priorities, setPriorities] = useState();
     const [ticketTypes, setTicketTypes] = useState();
-
-    // Fallback map
-    const assignees = [{ userID: 2, username: 'dev_user' }, { userID: 3, username: 'other_user' }];
 
     const isCreator = ticket ? user.userID === ticket.creator.userID : false;
     const isAssignee = ticket ? user.userID === ticket.assignee.userID : false;
@@ -28,6 +26,16 @@ export default function TicketDetail() {
         res = await res.json();
         setTicket(res);
     }
+
+    const fetchAssignee = async () => {
+        if (user.role !== 'ADMIN') return;
+        const res = await fetch("/api/admin/users?role=IT", {
+            method: "GET"
+        })
+        if (!res.ok) return;
+        const resp = await res.json();
+        setAssignees(resp);
+    };
 
     const fetchTicketTypes = async () => {
         const res = await fetch("/api/ticket-type", {
@@ -117,6 +125,7 @@ export default function TicketDetail() {
 
     useEffect(() => {
         fetchTicketDetail();
+        fetchAssignee();
         fetchTicketTypes();
         fetchPriorities();
     }, []);

@@ -35,33 +35,6 @@ public class UserController {
         return ResponseEntity.ok(user.getUserNoPassword());
     }
 
-    @PostMapping
-    public ResponseEntity<User> addAccount(
-            @RequestParam String username,
-            @RequestParam String password
-    ) {
-        try {
-            User created = userService.addAccount(username, password);
-
-            if (created == null) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).build();
-            }
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(created.getUserNoPassword());
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getAccount(@PathVariable Integer id) {
-        User user = userService.getAccount(id);
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return ResponseEntity.ok(user.getUserNoPassword());
-    }
-
     @PutMapping("/{id}/password")
     public ResponseEntity<Void> changeUserPassword(
             @PathVariable Integer id,

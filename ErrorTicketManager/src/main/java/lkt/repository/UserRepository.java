@@ -1,6 +1,7 @@
 package lkt.repository;
 
 import lkt.mapper.Mapper;
+import lkt.model.Role;
 import lkt.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -9,6 +10,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class UserRepository implements IUserRepository {
@@ -25,6 +28,7 @@ public class UserRepository implements IUserRepository {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
             return mapper.getUser(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -39,7 +43,26 @@ public class UserRepository implements IUserRepository {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, userID);
             ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
             return mapper.getUser(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<User> findUsersByRole(Role role) {
+        try {
+            String sql = "select * from users where role = ?::role";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, role.toString());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            List<User> userList = new ArrayList<>();
+            while (resultSet.next()) {
+                userList.add(mapper.getUser(resultSet));
+            }
+            return userList;
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
@@ -57,6 +80,7 @@ public class UserRepository implements IUserRepository {
             preparedStatement.setString(4, user.getPassword());
             preparedStatement.setInt(5, user.getDepartmentID());
             ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
             return mapper.getUser(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();

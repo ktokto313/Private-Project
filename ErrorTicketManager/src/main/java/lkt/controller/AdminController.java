@@ -1,6 +1,7 @@
 package lkt.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lkt.model.Role;
 import lkt.model.Ticket;
 import lkt.model.User;
 import lkt.util.JWTUtil;
@@ -27,6 +28,45 @@ import java.util.List;
 public class AdminController {
     @Autowired
     private IAdminService adminService;
+
+    @PostMapping("/users")
+    public ResponseEntity<User> addAccount(
+            @RequestParam String username,
+            @RequestParam String password
+    ) {
+        try {
+            User created = adminService.addAccount(username, password);
+
+            if (created == null) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            }
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(created.getUserNoPassword());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> getAccounts(
+            @RequestParam(value="role", required = false) String string
+    ) {
+        Role role = Util.getRoleFromString(string);
+        List<User> userList = adminService.getAccountsByRole(role);
+        if (userList == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(userList);
+    }
+
+    @GetMapping("/users/{id}")
+    public ResponseEntity<User> getAccount(@PathVariable Integer id) {
+        User user = adminService.getAccount(id);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(user);
+    }
 
     @PutMapping("/users/{userID}/password")
     public ResponseEntity<Void> changeUserPassword(
@@ -100,7 +140,7 @@ public class AdminController {
     public ResponseEntity<Void> updateTicket(
             @PathVariable("ticket-id") Integer ticketID,
             @RequestBody Ticket ticket,
-            @RequestParam(value="state") String string,
+            @RequestParam(value="state", required = false) String string,
             HttpServletRequest request) {
         User currentUser = JWTUtil.getUser(request);
         ticket.setState(Util.getStateFromString(string));

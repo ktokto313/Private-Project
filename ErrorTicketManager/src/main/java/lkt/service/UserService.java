@@ -15,25 +15,6 @@ public class UserService implements IUserService {
     private static final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     @Override
-    public User addAccount(String username, String password) {
-        User existingUser = userRepository.findByUsername(username);
-        if (existingUser != null) {
-            throw new IllegalArgumentException("Username already exists");
-        }
-
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(bCryptPasswordEncoder.encode(password));
-        user.setRole(Role.USER);
-        return userRepository.insert(user);
-    }
-
-    @Override
-    public User getAccount(Integer id) {
-        return userRepository.findByUserID(id);
-    }
-
-    @Override
     public User getAccountByUsername(String username) {
         return userRepository.findByUsername(username);
     }

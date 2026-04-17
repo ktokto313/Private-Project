@@ -25,6 +25,7 @@ public class Util {
     }
 
     public static State getStateFromString(String string) {
+        if (string == null) return null;
         for (State state : State.values()) {
             if (string.equals(state.toString())) return state;
         }
