@@ -58,7 +58,7 @@ export default function TicketDetail() {
     const updateTicketState = async (value) => {
         const res = await fetch((user.role === 'ADMIN' ? "/api/admin/tickets/" : "/api/tickets/") + ticketID + "?state=" + value, {
             method: "PUT",
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({})
         });
         if (res.ok) {
@@ -80,13 +80,13 @@ export default function TicketDetail() {
                 tempTicket.ticketType = { ID: value };
                 break;
         }
-        
+
         // const data = new URLSearchParams();
         console.log(JSON.stringify(tempTicket));
         // data.append("ticket", JSON.stringify(tempTicket));
         const res = await fetch("/api/admin/tickets/" + ticketID, {
             method: "PUT",
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(tempTicket)
         });
         if (res.ok) {
@@ -96,10 +96,8 @@ export default function TicketDetail() {
     };
 
     const handlePostComment = async () => {
-        const tempComment = {};
-        tempComment.detail = comment;
-        const data = new URLSearchParams();
-        data.append("comment", tempComment);
+        const data = new FormData();
+        data.append("detail", comment);
         const res = await fetch("/api/tickets/" + ticketID + "/comments", {
             method: "POST",
             body: data
@@ -107,6 +105,7 @@ export default function TicketDetail() {
         if (res.ok) {
             console.log("Posted comment:", comment);
             setComment('');
+            fetchTicketDetail();
         }
     };
 
@@ -158,6 +157,20 @@ export default function TicketDetail() {
                         </div>
                     </div>
 
+                    <div className="comments-display-section" style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginTop: '20px', marginBottom: '20px' }}>
+                        {(ticket.comments || []).map((c, index) => (
+                            <div key={c.ID || index} className="comment-list-item" style={{ padding: '15px', borderRadius: '8px', backgroundColor: '#f9f9f9', border: '1px solid #e0e0e0' }}>
+                                <div className="comment-author-info" style={{ fontWeight: '600', marginBottom: '8px', color: '#333' }}>
+                                    {c.creator?.username || c.user?.username || 'User'}
+                                    {c.createdAt && <span style={{ fontWeight: '400', fontSize: '0.85em', color: '#888', marginLeft: '8px' }}>{new Date(c.createdAt).toLocaleString()}</span>}
+                                </div>
+                                <div className="comment-text-content" style={{ color: '#444', lineHeight: '1.5', whiteSpace: 'pre-wrap' }}>
+                                    {c.detail}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
                     <div className="resolution-section">
                         {isResolved && (isCreator || user.role === 'ADMIN') && (
                             <div className="creator-actions">
@@ -183,7 +196,7 @@ export default function TicketDetail() {
                         </div>
                         <select
                             className="property-select"
-                            value={ticket.assignee.userID} 
+                            value={ticket.assignee.userID}
                             onChange={(e) => adminTicketUpdate('assignee', parseInt(e.target.value))}>
                             <option key={ticket.assignee.userID} value={ticket.assignee.userID}>{ticket.assignee.username}</option>
                             {user.role === 'ADMIN' && assignees.filter(a => a.userID !== ticket.assignee.userID).map(a => (
