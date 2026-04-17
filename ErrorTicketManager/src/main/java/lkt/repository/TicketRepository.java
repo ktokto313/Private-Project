@@ -203,7 +203,7 @@ public class TicketRepository implements ITicketRepository {
                 from comments c
                 left join users cu on cu.id = c.creator
                 where c.ticketid = ?
-                order by c.timecreated asc, c.id asc
+                order by c.timecreated desc, c.id desc 
                 """;
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, ticketID);

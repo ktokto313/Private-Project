@@ -18,7 +18,7 @@ export default function Dashboard() {
   const [isNewTicketModalOpen, setIsNewTicketModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const filterDropdownRef = useRef(null);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const PAGE_SIZE = 20;
 
@@ -34,7 +34,7 @@ export default function Dashboard() {
     };
   }, [filterDropdownRef]);
 
-  useEffect(()=> {
+  useEffect(() => {
     fetchTicketsAPI();
   }, []);
 
@@ -81,7 +81,7 @@ export default function Dashboard() {
   }, [tickets]);
 
   const ticketOnClick = (ticketID) => {
-    navigate("/ticket/:"+ticketID);
+    navigate("/ticket/:" + ticketID);
   };
 
   const totalFilteredCount = filteredTickets.length;
@@ -97,7 +97,7 @@ export default function Dashboard() {
           <button className="btn outline-btn filter-btn" onClick={handleFilterToggle}>
             Filter
           </button>
-          
+
           {isFilterOpen && (
             <div className="filter-dropdown">
               <div className="filter-dropdown-header">
@@ -109,8 +109,8 @@ export default function Dashboard() {
               <div className="filter-options">
                 {Object.entries(STATUS_MAP).map(([value, statusKey]) => (
                   <label key={statusKey} className="filter-option">
-                    <input 
-                      type="checkbox" 
+                    <input
+                      type="checkbox"
                       checked={selectedFilters.includes(value)}
                       onChange={() => handleFilterChange(value)}
                     />
@@ -122,7 +122,7 @@ export default function Dashboard() {
             </div>
           )}
         </div>
-        
+
         <span className="filter-summary">
           Total ticket(s) in filter: {totalFilteredCount} tickets
         </span>
@@ -179,9 +179,9 @@ export default function Dashboard() {
       </div>
 
       {isNewTicketModalOpen && (
-        <NewTicketForm 
-          onClose={() => setIsNewTicketModalOpen(false)} 
-          onRefresh={() => console.log('Refresh tickets')} 
+        <NewTicketForm
+          onClose={() => setIsNewTicketModalOpen(false)}
+          onRefresh={fetchTicketsAPI}
         />
       )}
     </div>
