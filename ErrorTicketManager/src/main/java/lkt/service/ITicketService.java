@@ -23,7 +23,8 @@ public interface ITicketService {
 
     boolean updateTicketState(Integer ticketID, State state, User authenticatedUser);
 
-    boolean addAssignee(Integer ticketID, Integer userID, User authenticatedUser);
+// TODO disabled api line, migrated to admin APIs
+//    boolean addAssignee(Integer ticketID, Integer userID, User authenticatedUser);
 
     boolean addComment(
             Integer ticketID,

@@ -1,7 +1,9 @@
 package lkt.service;
 
 import lkt.model.*;
+import lkt.observer.NotificationBroadcaster;
 import lkt.repository.ITicketRepository;
+import lkt.repository.ITicketTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,8 +23,15 @@ public class AdminService implements IAdminService {
 
     @Autowired
     private ITicketRepository ticketRepository;
+
+    @Autowired
+    private ITicketTypeRepository ticketTypeRepository;
+
     @Autowired
     private TicketStateMachineService ticketStateMachineService;
+
+    @Autowired
+    private NotificationBroadcaster notificationBroadcaster;
 
     private static final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
@@ -135,20 +144,42 @@ public class AdminService implements IAdminService {
         if (baseTicket == null) {
             return false;
         }
+        List<String> actions = new ArrayList<>();
+        List<String> actionResults = new ArrayList<>();
         // Only allow ticketType, assignees, priority, state change, purify data
-        if (modifiedTicket.getTicketType() != null)
+        if (modifiedTicket.getTicketType() != null) {
             baseTicket.setTicketType(modifiedTicket.getTicketType());
-        if (modifiedTicket.getAssignee() != null)
+            actions.add("ticketType");
+            actionResults.add(ticketTypeRepository.findByID(baseTicket.getTicketType().getID()).getTitle());
+        }
+        if (modifiedTicket.getAssignee() != null) {
             baseTicket.setAssignee(modifiedTicket.getAssignee());
-        if (modifiedTicket.getPriority() != null)
+            actions.add("assignee");
+            actionResults.add(userRepository.findByUserID(baseTicket.getAssignee().getUserID()).getUsername());
+        }
+        if (modifiedTicket.getPriority() != null) {
             baseTicket.setPriority(modifiedTicket.getPriority());
+            actions.add("priority");
+            actionResults.add(priorityRepository.findByID(baseTicket.getPriority().getID()).getName());
+        }
         if (modifiedTicket.getState() != null) {
             if (!ticketStateMachineService.isTransitionAllowed(baseTicket.getState(), modifiedTicket.getState(), authenticatedUser, baseTicket)) {
                 return false;
             }
             baseTicket.setState(modifiedTicket.getState());
+            actions.add(modifiedTicket.getState().name());
+            actionResults.add(null);
         }
 
-        return ticketRepository.updateTicket(ticketID, baseTicket);
+        boolean result = ticketRepository.updateTicket(ticketID, baseTicket);
+        if (result) {
+            for (int i = 0; i < actions.size(); i++) {
+                List<User> receivingUserList = new ArrayList<>();
+                receivingUserList.add(baseTicket.getAssignee());
+                receivingUserList.add(baseTicket.getCreator());
+                notificationBroadcaster.notifySubscribers(authenticatedUser, receivingUserList, actions.get(i), ticketID, baseTicket.getTitle(), actionResults.get(i));
+            }
+        }
+        return result;
     }
 }

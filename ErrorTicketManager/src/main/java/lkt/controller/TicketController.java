@@ -81,19 +81,20 @@ public class TicketController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/{id}/assignees")
-    public ResponseEntity<Void> addAssignee(
-            @PathVariable("id") Integer ticketID,
-            @RequestParam Integer userID,
-            HttpServletRequest request
-    ) {
-        User authenticatedUser = getUser(request);
-        boolean assigned = ticketService.addAssignee(ticketID, userID, authenticatedUser);
-        if (!assigned) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
+// TODO disabled api line, migrated to admin APIs
+//    @PostMapping("/{id}/assignees")
+//    public ResponseEntity<Void> addAssignee(
+//            @PathVariable("id") Integer ticketID,
+//            @RequestParam Integer userID,
+//            HttpServletRequest request
+//    ) {
+//        User authenticatedUser = getUser(request);
+//        boolean assigned = ticketService.addAssignee(ticketID, userID, authenticatedUser);
+//        if (!assigned) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//        }
+//        return ResponseEntity.status(HttpStatus.CREATED).build();
+//    }
 
     @PostMapping("/{id}/comments")
     public ResponseEntity<Void> addComment(

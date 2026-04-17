@@ -7,6 +7,8 @@ import java.util.List;
 public interface IPriorityRepository {
     List<Priority> findAll();
 
+    Priority findByID(int id);
+
     Priority insert(Priority priority);
 
     boolean update(Priority priority);

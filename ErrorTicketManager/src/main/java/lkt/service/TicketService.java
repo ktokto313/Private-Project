@@ -1,11 +1,13 @@
 package lkt.service;
 
 import lkt.model.*;
+import lkt.observer.NotificationBroadcaster;
 import lkt.repository.ITicketRepository;
 import lkt.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,6 +21,9 @@ public class TicketService implements ITicketService {
 
     @Autowired
     private TicketStateMachineService ticketStateMachineService;
+
+    @Autowired
+    private NotificationBroadcaster notificationBroadcaster;
 
     @Override
     public boolean createTicket(
@@ -44,7 +49,10 @@ public class TicketService implements ITicketService {
                 priorityID,
                 typeID
         );
-        if (ticketID == null) {
+        if (ticketID != null) {
+            List<User> adminList = userRepository.findUsersByRole(Role.ADMIN);
+            notificationBroadcaster.notifySubscribers(authenticatedUser, adminList, State.CREATED.name(), ticketID, title, null);
+        } else {
             return false;
         }
 
@@ -90,21 +98,29 @@ public class TicketService implements ITicketService {
             return false;
         }
         baseTicket.setState(state);
-        return ticketRepository.updateTicket(ticketID, baseTicket);
+        boolean result = ticketRepository.updateTicket(ticketID, baseTicket);
+        if (result) {
+            List<User> receivingUserList = new ArrayList<>();
+            receivingUserList.add(baseTicket.getAssignee());
+            receivingUserList.add(baseTicket.getCreator());
+            notificationBroadcaster.notifySubscribers(authenticatedUser, receivingUserList, state.name(), ticketID, baseTicket.getTitle(), null);
+        }
+        return result;
     }
 
-    @Override
-    public boolean addAssignee(Integer ticketID, Integer userID, User authenticatedUser) {
-        if (!canManageTicket(authenticatedUser) || ticketID == null || userID == null) {
-            return false;
-        }
-        Ticket ticket = viewTicket(ticketID, authenticatedUser);
-        User assignee = userRepository.findByUserID(userID);
-        if (ticket == null || assignee == null) {
-            return false;
-        }
-        return ticketRepository.updateAssignee(ticketID, userID);
-    }
+// TODO disabled api line, migrated to admin APIs
+//    @Override
+//    public boolean addAssignee(Integer ticketID, Integer userID, User authenticatedUser) {
+//        if (!canManageTicket(authenticatedUser) || ticketID == null || userID == null) {
+//            return false;
+//        }
+//        Ticket ticket = viewTicket(ticketID, authenticatedUser);
+//        User assignee = userRepository.findByUserID(userID);
+//        if (ticket == null || assignee == null) {
+//            return false;
+//        }
+//        return ticketRepository.updateAssignee(ticketID, userID);
+//    }
 
     @Override
     public boolean addComment(
@@ -131,7 +147,12 @@ public class TicketService implements ITicketService {
                 authenticatedUser.getUserID(),
                 ticketID
         );
-        if (commentID == null) {
+        if (commentID != null) {
+            List<User> receivingUserList = new ArrayList<>();
+            receivingUserList.add(ticket.getAssignee());
+            receivingUserList.add(ticket.getCreator());
+            notificationBroadcaster.notifySubscribers(authenticatedUser, receivingUserList, "comment", ticketID, ticket.getTitle(), null);
+        } else {
             return false;
         }
 

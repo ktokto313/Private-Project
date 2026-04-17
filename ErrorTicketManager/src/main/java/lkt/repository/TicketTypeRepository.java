@@ -40,6 +40,24 @@ public class TicketTypeRepository implements ITicketTypeRepository {
     }
 
     @Override
+    public TicketType findByID(int id) {
+        String sql = """
+                select id, title, description
+                from tickettypes
+                where id = ?
+                """;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return mapper.mapTicketTypeRow(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
     public TicketType insert(TicketType ticketType) {
         String sql = """
                 insert into tickettypes (title, description)
