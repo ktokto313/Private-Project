@@ -10,11 +10,21 @@ const fetchTicketTypesAPI = async () => {
   return resp;
 };
 
-const submitTicketAPI = async (ticketData) => {
-  await fetch("/api/tickets", {
+const fetchPrioritiesAPI = async () => {
+  const res = await fetch("/api/priorities", {
     method: "GET"
   })
-    .then((res)=> {
+  if (!res.ok) return;
+  const resp = await res.json();
+  return resp;
+};
+
+const submitTicketAPI = async (ticketData) => {
+  await fetch("/api/tickets", {
+    method: "POST",
+    body: ticketData
+  })
+    .then((res) => {
       console.log('Ticket submitted successfully:', ticketData);
       if (res.ok) return { success: true };
     })
@@ -29,19 +39,23 @@ const NewTicketForm = ({ onClose, onRefresh }) => {
     problemType: '',
     attachments: []
   });
-  
+
   const [ticketTypes, setTicketTypes] = useState([]);
+  const [priorities, setPriorities] = useState([]);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    // Fetch problem types on mount
+    // Fetch options on mount
     const fetchOptions = async () => {
       try {
         const types = await fetchTicketTypesAPI();
-        setTicketTypes(types);
+        if (types) setTicketTypes(types);
+
+        const prios = await fetchPrioritiesAPI();
+        if (prios) setPriorities(prios);
       } catch (error) {
-        console.error("Failed to fetch problem types", error);
+        console.error("Failed to fetch options", error);
       }
     };
     fetchOptions();
@@ -81,7 +95,7 @@ const NewTicketForm = ({ onClose, onRefresh }) => {
     if (!formData.detail.trim()) newErrors.detail = 'Detail is required';
     if (!formData.priority) newErrors.priority = 'Priority is required';
     if (!formData.problemType) newErrors.problemType = 'Request/Problem type is required';
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -95,16 +109,16 @@ const NewTicketForm = ({ onClose, onRefresh }) => {
       // Create FormData to simulate sending files
       const submissionData = new FormData();
       submissionData.append('title', formData.title);
-      submissionData.append('detail', formData.detail);
+      submissionData.append('description', formData.detail);
       submissionData.append('priority', formData.priority);
-      submissionData.append('problemType', formData.problemType);
+      submissionData.append('type', formData.problemType);
       formData.attachments.forEach(file => {
-        submissionData.append('attachments', file);
+        submissionData.append('file', file);
       });
 
       // Submit
       await submitTicketAPI(submissionData);
-      
+
       // On success
       if (onRefresh) onRefresh();
       onClose();
@@ -160,9 +174,9 @@ const NewTicketForm = ({ onClose, onRefresh }) => {
                 disabled={isSubmitting}
               >
                 <option value="" disabled></option>
-                <option value="Low">Low</option>
-                <option value="Medium">Medium</option>
-                <option value="High">High</option>
+                {priorities.map(p => (
+                  <option key={p.ID} value={p.ID}>{p.name}</option>
+                ))}
               </select>
               {errors.priority && <span className="ntf-error-text">{errors.priority}</span>}
             </div>
@@ -179,7 +193,7 @@ const NewTicketForm = ({ onClose, onRefresh }) => {
               >
                 <option value="" disabled></option>
                 {ticketTypes.map(type => (
-                  <option key={type.id} value={type.id}>{type.name}</option>
+                  <option key={type.ID} value={type.ID}>{type.title}</option>
                 ))}
               </select>
               {errors.problemType && <span className="ntf-error-text">{errors.problemType}</span>}
@@ -203,7 +217,7 @@ const NewTicketForm = ({ onClose, onRefresh }) => {
               <ul className="ntf-file-list">
                 {formData.attachments.map((file, index) => (
                   <li key={index}>
-                    {file.name} 
+                    {file.name}
                     <button type="button" onClick={() => removeAttachment(index)} disabled={isSubmitting}>&times;</button>
                   </li>
                 ))}
