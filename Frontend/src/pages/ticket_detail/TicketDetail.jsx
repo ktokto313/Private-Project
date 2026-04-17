@@ -15,7 +15,7 @@ export default function TicketDetail() {
     const [ticketTypes, setTicketTypes] = useState();
 
     const isCreator = ticket ? user.userID === ticket.creator.userID : false;
-    const isAssignee = ticket ? user.userID === ticket.assignee.userID : false;
+    const isAssignee = ticket && ticket.assignee ? user.userID === ticket.assignee.userID : false;
     const isResolved = ticket ? ticket.state === 'RESOLVED' : false;
 
     const fetchTicketDetail = async () => {
@@ -90,6 +90,9 @@ export default function TicketDetail() {
             body: JSON.stringify(tempTicket)
         });
         if (res.ok) {
+            if (field == "assignee" && ticket.state == "CREATED") {
+                updateTicketState("PROCESSING");
+            }
             console.log("Update success fetching data again!");
             fetchTicketDetail();
         }
@@ -196,10 +199,14 @@ export default function TicketDetail() {
                         </div>
                         <select
                             className="property-select"
-                            value={ticket.assignee.userID}
+                            value={ticket.assignee ? ticket.assignee.userID : "Unassigned"}
                             onChange={(e) => adminTicketUpdate('assignee', parseInt(e.target.value))}>
-                            <option key={ticket.assignee.userID} value={ticket.assignee.userID}>{ticket.assignee.username}</option>
-                            {user.role === 'ADMIN' && assignees.filter(a => a.userID !== ticket.assignee.userID).map(a => (
+                            {ticket.assignee ? (
+                                <option key={ticket.assignee?.userID} value={ticket.assignee?.userID}>{ticket.assignee?.username}</option>
+                            ) : (
+                                <option key="Unassigned" value="Unassigned">Unassigned</option>
+                            )}
+                            {user.role === 'ADMIN' && assignees.filter(a => a.userID !== ticket.assignee?.userID).map(a => (
                                 <option key={a.userID} value={a.userID}>{a.username}</option>
                             ))}
                         </select>

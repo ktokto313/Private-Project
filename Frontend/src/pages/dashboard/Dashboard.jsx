@@ -151,7 +151,7 @@ export default function Dashboard() {
                   </span>
                 </td>
                 <td>{ticket.priority.name}</td>
-                <td>{ticket.assignee.username}</td>
+                <td>{ticket.assignee ? ticket.assignee.username : "Unassigned"}</td>
                 <td>{
                   new Date(Date.parse(ticket.timeCreated)).toDateString()
                 }</td>
