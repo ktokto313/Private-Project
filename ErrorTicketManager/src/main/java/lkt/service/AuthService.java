@@ -17,13 +17,6 @@ public class AuthService implements IAuthService {
     private static final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     public String login(User user) {
-        //TODO admin injection to test :pensive:
-        //TODO must remove, don't backdoor me
-        if (user.getUsername().equals("sigma") && user.getPassword().equals("dongnai")) {
-            user.setRole(Role.ADMIN);
-            return JWTUtil.createToken(user);
-        }
-
         User foundUser = userRepository.findByUsername(user.getUsername());
         if (foundUser == null ||
                 !bCryptPasswordEncoder.matches(user.getPassword(), foundUser.getPassword()))

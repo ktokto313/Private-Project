@@ -68,9 +68,6 @@ public class TicketStateMachineService {
 
         boolean isCreator = ticketCreatorId.equals(requesterId);
         boolean isAssignee = ticketAssigneeId.equals(requesterId);
-        //TODO
-        System.out.println(isAssignee);
-        System.out.println(isCreator);
 
         // Standard rule mapping (admin-only transitions are rejected for non-admin users).
         if (currentState == State.RESOLVED && targetState == State.PROCESSING) {

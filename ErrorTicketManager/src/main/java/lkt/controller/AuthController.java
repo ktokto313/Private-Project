@@ -25,14 +25,11 @@ public class AuthController {
         try {
             String jwt = authService.login(user);
             if (jwt == null) return ResponseEntity.status(401).build();
-            //Todo remove debug
-            System.out.println(user);
             ResponseCookie cookie = CookieUtil.makeCookieFromJWT(jwt);
             return ResponseEntity.ok()
                     .header(HttpHeaders.SET_COOKIE, cookie.toString())
                     .body(user.getUserNoPassword());
         } catch (Exception e) {
-            //TODO remove debug
             e.printStackTrace();
         }
         return ResponseEntity.status(401).build();

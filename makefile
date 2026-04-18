@@ -1,6 +1,6 @@
 build:
 	cd ./ErrorTicketManager && \
-	rm ./build/libs/*.jar && \
+	rm -f ./build/libs/*.jar && \
 	./gradlew bootJar
 
 run: build

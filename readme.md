@@ -19,6 +19,27 @@ This is a full-stack project for managing error tickets. It comprises a React fr
 * `makefile`: Simplified command interface for building and running the project.
 * `diagram.drawio`, `ERD.png`, `specification_breakdown.docx`: UI sketches, database entity-relationship diagram, and related requirement specifications.
 
+## Environment Configuration
+
+The project uses two primary files for configurations and environment variables:
+
+### 1. `.env`
+This file configures the Spring Boot application and JWT properties:
+```env
+POSTGRES_USER: sa
+POSTGRES_DB: app
+POSTGRES_PASSWORD: example
+PGADMIN_DEFAULT_EMAIL: a@a.a
+PGADMIN_DEFAULT_PASSWORD: example
+
+SERVER_ADDRESS: 0.0.0.0
+SERVER_PORT: 8081
+JWT_COOKIE_NAME: Auth
+JWT_LIFETIME: 86400
+JWT_ISSUER: LKT
+JWT_SECRET: a-string-for-testing
+```
+
 ## Getting Started
 
 ### Prerequisites

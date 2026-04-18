@@ -32,12 +32,16 @@ public class JWTFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         Cookie cookie = CookieUtil.getJWTCookie(request.getCookies());
         if (cookie == null) {
-            //TODO: check if verify throw exception or not
             ResponseUtil.writeErrorResponse(response, HttpStatus.UNAUTHORIZED);
             return;
         }
-        DecodedJWT decodedJWT = JWTUtil.verify(cookie.getValue());
-        request.setAttribute(cookieName, decodedJWT);
+        try {
+            DecodedJWT decodedJWT = JWTUtil.verify(cookie.getValue());
+            request.setAttribute(cookieName, decodedJWT);
+        } catch (Exception e) {
+            ResponseUtil.writeErrorResponse(response, HttpStatus.UNAUTHORIZED);
+            return;
+        }
         filterChain.doFilter(request, response);
     }
 }

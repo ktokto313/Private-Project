@@ -23,7 +23,6 @@ public class UserRepository implements IUserRepository {
     @Override
     public User findByUsername(String username) {
         try {
-            //TODO mapper here only take one user from the result set
             String sql = "select * from users where username = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, username);

@@ -1,6 +1,7 @@
 package lkt.component;
 
 import org.postgresql.ds.PGSimpleDataSource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -12,10 +13,22 @@ public class DBContext {
     private final static PGSimpleDataSource dataSource = new PGSimpleDataSource();
 
     static {
-        //TODO: clean up
-        dataSource.setUrl("jdbc:postgresql://db:5432/app");
-        dataSource.setUser("sa");
-        dataSource.setPassword("example");
+        dataSource.setUrl("jdbc:postgresql://db:5432/");
+    }
+
+    @Value("${postgres.db}")
+    private void setDatabaseName(String databaseName) {
+        dataSource.setDatabaseName(databaseName);
+    }
+
+    @Value("${postgres.user}")
+    private void setUser(String user) {
+        dataSource.setUser(user);
+    }
+
+    @Value("${postgres.password}")
+    private void setPassword(String password) {
+        dataSource.setPassword(password);
     }
 
     @Bean
