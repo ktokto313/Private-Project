@@ -1,0 +1,341 @@
+/* admin_dashboard.css */
+/* @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap'); */
+
+.admin-dashboard-container {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --accent-color: #3b82f6;
+  --accent-hover: #2563eb;
+  --danger-color: #ef4444;
+  --danger-hover: #dc2626;
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(0, 0, 0, 0.1);
+  --success-color: #10b981;
+
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: radial-gradient(circle at top left, #f1f5f9, #e2e8f0);
+  color: var(--text-primary);
+  font-family: 'Outfit', sans-serif;
+}
+
+.admin-content-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  padding: 2rem 5%;
+  flex-grow: 1;
+}
+
+@media (max-width: 900px) {
+  .admin-content-wrapper {
+    grid-template-columns: 1fr;
+  }
+}
+
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 2rem;
+  color: var(--text-primary);
+  border-bottom: 2px solid var(--accent-color);
+  display: inline-block;
+  padding-bottom: 0.5rem;
+}
+
+/* Inputs & Buttons */
+.styled-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  color: var(--text-primary);
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  margin-bottom: 0.75rem;
+}
+
+.styled-input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+  background: #ffffff;
+}
+
+.styled-input::placeholder {
+  color: var(--text-secondary);
+}
+
+button {
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+}
+
+.primary-btn {
+  background: linear-gradient(135deg, var(--accent-color), #6366f1);
+  color: white;
+  padding: 0.8rem 1.5rem;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+.action-btn {
+  background: rgba(0, 0, 0, 0.03);
+  color: var(--text-primary);
+  border: 1px solid var(--glass-border);
+  padding: 0.75rem 1rem;
+}
+
+.action-btn:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.danger-btn {
+  background: transparent;
+  color: var(--danger-color);
+  border: 1px solid var(--danger-color);
+  padding: 0.8rem 1.5rem;
+}
+
+.danger-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.danger-solid-btn {
+  background: var(--danger-color);
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border: 1px solid #fca5a5;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.danger-solid-btn:hover {
+  background: var(--danger-hover);
+  transform: translateY(-2px);
+}
+
+.secondary-btn {
+  background: #cbd5e1;
+  color: #334155;
+  padding: 0.8rem 1.5rem;
+}
+
+.secondary-btn:hover {
+  background: #94a3b8;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+.mt-10 {
+  margin-top: 10px;
+}
+
+/* User Management Specifics */
+.user-info-box {
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  border-left: 4px solid var(--accent-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.user-info-box p {
+  margin: 0.5rem 0;
+  font-size: 1.05rem;
+}
+
+.info-label {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-right: 8px;
+}
+
+.update-form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+}
+
+.action-buttons-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.action-buttons-row button {
+  flex: 1;
+}
+
+/* Delete Confirmation Panel */
+.delete-confirm-panel {
+  background: #fee2e2;
+  /* RED background */
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.delete-confirm-panel p {
+  color: #991b1b;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
+.confirm-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+/* SLA Management Specifics */
+.table-container {
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.styled-table th {
+  background: rgba(0, 0, 0, 0.03);
+  padding: 1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--glass-border);
+  white-space: nowrap;
+}
+
+.styled-table td {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+  vertical-align: middle;
+}
+
+.styled-table tbody tr:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.sort-icon {
+  margin-left: 0.5rem;
+  cursor: pointer;
+  opacity: 0.6;
+  font-size: 1.1rem;
+  transition: opacity 0.2s, transform 0.2s;
+  display: inline-block;
+}
+
+.sort-icon:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.truncate-cell {
+  position: relative;
+}
+
+.truncate-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.truncate-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 80px;
+}
+
+.icon-btn {
+  background: transparent;
+  padding: 0.4rem;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  margin-left: 0.5rem;
+  color: var(--text-primary);
+}
+
+.icon-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Animations */
+.fade-in {
+  animation: fadeIn 0.4s ease-in;
+}
+
+.slide-down {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

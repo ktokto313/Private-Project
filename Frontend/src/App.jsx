@@ -7,6 +7,7 @@ import LoginPage from './pages/LoginPage'
 import Profile from './pages/dashboard/Dashboard';
 import './App.css';
 import TicketDetail from './pages/ticket_detail/TicketDetail';
+import AdminDashboard from './pages/admin_dashboard/AdminDashboard';
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/ticket/:id" element={<TicketDetail />} />
+            <Route path="/admin-dashboard" element={<AdminDashboard />} />
           </Route>
         </Routes>
       </BrowserRouter>

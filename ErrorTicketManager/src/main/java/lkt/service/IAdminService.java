@@ -1,20 +1,19 @@
 package lkt.service;
 
-import lkt.model.Priority;
-import lkt.model.Role;
-import lkt.model.Ticket;
-import lkt.model.User;
+import lkt.model.*;
 
 import java.util.List;
 
 public interface IAdminService {
     User addAccount(String username, String password);
 
-    User getAccount(int id);
+    User getAccount(String username);
 
     List<User> getAccountsByRole(Role role);
 
     boolean changeUserPassword(Integer userID, String newPassword);
+
+    List<Department> getDepartments();
 
     boolean changeDepartment(Integer userID, Integer department);
 

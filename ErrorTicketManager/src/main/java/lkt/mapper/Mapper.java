@@ -93,4 +93,11 @@ public class Mapper {
         priority.setTimeToFinish(resultSet.getObject("timetofinish", PGInterval.class));
         return priority;
     }
+
+    public Department mapDepartmentRow(ResultSet resultSet) throws SQLException {
+        Department department = new Department();
+        department.setID(resultSet.getInt("id"));
+        department.setName(resultSet.getString("name"));
+        return department;
+    }
 }

@@ -1,9 +1,7 @@
 package lkt.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import lkt.model.Role;
-import lkt.model.Ticket;
-import lkt.model.User;
+import lkt.model.*;
 import lkt.util.JWTUtil;
 import lkt.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import lkt.model.Priority;
 import lkt.service.IAdminService;
 
 import java.util.List;
@@ -59,33 +56,45 @@ public class AdminController {
         return ResponseEntity.ok(userList);
     }
 
-    @GetMapping("/users/{id}")
-    public ResponseEntity<User> getAccount(@PathVariable Integer id) {
-        User user = adminService.getAccount(id);
-        if (user == null) {
+    @GetMapping("/users/")
+    public ResponseEntity<User> getAccount(@RequestParam String username) {
+        User foundUser = adminService.getAccount(username);
+        if (foundUser == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(foundUser);
     }
 
     @PutMapping("/users/{userID}/password")
     public ResponseEntity<Void> changeUserPassword(
             @PathVariable Integer userID,
-            @RequestParam String newPassword
+            @RequestBody User user
     ) {
-        boolean updated = adminService.changeUserPassword(userID, newPassword);
+        if (user.getPassword() == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        boolean updated = adminService.changeUserPassword(userID, user.getPassword());
         if (!updated) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/departments")
+    public ResponseEntity<List<Department>> getDepartments() {
+        List<Department> departmentList = adminService.getDepartments();
+        if (departmentList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(departmentList);
+    }
+
     @PutMapping("/users/{userID}/department")
     public ResponseEntity<Void> changeDepartment(
             @PathVariable Integer userID,
-            @RequestParam Integer department
+            @RequestBody Department department
     ) {
-        boolean updated = adminService.changeDepartment(userID, department);
+        boolean updated = adminService.changeDepartment(userID, department.getID());
         if (!updated) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -118,7 +127,7 @@ public class AdminController {
     @PutMapping("/priorities/{priority-id}")
     public ResponseEntity<Void> changePriority(
             @PathVariable("priority-id") Integer priorityID,
-            @RequestParam Priority priority
+            @RequestBody Priority priority
     ) {
         boolean updated = adminService.changePriority(priority);
         if (!updated) {

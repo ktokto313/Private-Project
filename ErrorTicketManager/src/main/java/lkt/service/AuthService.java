@@ -1,6 +1,5 @@
 package lkt.service;
 
-import lkt.model.Role;
 import lkt.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

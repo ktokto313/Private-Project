@@ -2,13 +2,10 @@ package lkt.service;
 
 import lkt.model.*;
 import lkt.observer.NotificationBroadcaster;
-import lkt.repository.ITicketRepository;
-import lkt.repository.ITicketTypeRepository;
+import lkt.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import lkt.repository.IPriorityRepository;
-import lkt.repository.IUserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +23,9 @@ public class AdminService implements IAdminService {
 
     @Autowired
     private ITicketTypeRepository ticketTypeRepository;
+
+    @Autowired
+    private IDepartmentRepository departmentRepository;
 
     @Autowired
     private TicketStateMachineService ticketStateMachineService;
@@ -50,8 +50,12 @@ public class AdminService implements IAdminService {
     }
 
     @Override
-    public User getAccount(int id) {
-        return userRepository.findByUserID(id).getUserNoPassword();
+    public User getAccount(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) return null;
+        Department department = departmentRepository.findByID(user.getDepartmentID());
+        user.setDepartment(department);
+        return user.getUserNoPassword();
     }
 
     @Override
@@ -71,6 +75,11 @@ public class AdminService implements IAdminService {
         user.setPassword(bCryptPasswordEncoder.encode(newPassword));
         userRepository.update(user);
         return true;
+    }
+
+    @Override
+    public List<Department> getDepartments() {
+        return departmentRepository.findAll();
     }
 
     @Override

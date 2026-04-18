@@ -22,7 +22,7 @@ export default function Navbar() {
           <Link to="/dashboard" className="nav-item">Dashboard</Link>
           {user.role === 'ADMIN' && (
             <>
-              <Link to="/admin" className="nav-item">Admin Dashboard</Link>
+              <Link to="/admin-dashboard" className="nav-item">Admin Dashboard</Link>
               <Link to="/statistics" className="nav-item">Statistic</Link>
             </>
           )}
