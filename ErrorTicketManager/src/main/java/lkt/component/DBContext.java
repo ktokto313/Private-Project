@@ -13,7 +13,7 @@ public class DBContext {
 
     static {
         //TODO: clean up
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/app");
+        dataSource.setUrl("jdbc:postgresql://db:5432/app");
         dataSource.setUser("sa");
         dataSource.setPassword("example");
     }

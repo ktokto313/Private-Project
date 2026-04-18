@@ -17,8 +17,10 @@ services:
     #  POSTGRES_USER: sa
     #  POSTGRES_PASSWORD: example
     env_file: "postgresql.env"
-    ports:
-      - 5432:5432
+    #ports:
+    #  - 5432:5432
+    networks:
+      - backend
 
   pqAdmin:
     image: dpage/pgadmin4
@@ -27,3 +29,34 @@ services:
     env_file: "postgresql.env"
     ports:
       - 80:80
+    networks:
+      - backend
+
+  app:
+    build: 
+      context: ./ErrorTicketManager
+      dockerfile: ./Dockerfile
+    image: error-ticket-manager:lastest
+    restart: unless-stopped
+    ports:
+      - 8081:8081
+    networks:
+      - frontend
+      - backend
+  
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: ./Dockerfile
+    image: frontend:latest
+    restart: unless-stopped
+    networks:
+      - frontend
+    ports: 
+      - 4173:4173
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge

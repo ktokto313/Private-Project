@@ -23,9 +23,8 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody User user) {
         try {
-            System.out.println(user);
             String jwt = authService.login(user);
-            if (jwt.isBlank()) return ResponseEntity.status(401).build();
+            if (jwt == null) return ResponseEntity.status(401).build();
             //Todo remove debug
             System.out.println(user);
             ResponseCookie cookie = CookieUtil.makeCookieFromJWT(jwt);

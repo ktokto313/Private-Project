@@ -9,10 +9,10 @@ export default defineConfig({
   // Retrieved 2026-04-13, License - CC BY-SA 4.0
 
   server: {
-    // host: "0.0.0.0",
+    host: "0.0.0.0",
     proxy: {
-      "/api" : "http://172.26.144.1:8081"
-      // "/api" : "http://localhost:8081"
+      // "/api" : "http://172.26.144.1:8081"
+      "/api": "http://app:8081"
     },
   },
 })

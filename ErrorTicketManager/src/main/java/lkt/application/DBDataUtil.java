@@ -9,8 +9,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-@SpringBootApplication
-@ComponentScan(basePackages = "lkt")
+//@SpringBootApplication
+//@ComponentScan(basePackages = "lkt")
 public class DBDataUtil {
     private static IUserRepository userRepository;
 
@@ -21,10 +21,10 @@ public class DBDataUtil {
     @Autowired
     private void setUserRepository(IUserRepository userRepository) {DBDataUtil.userRepository = userRepository;}
 
-    public static void main(String[] args) {
-        ApplicationContext context = SpringApplication.run(ErrorTicketManagerApplication.class, args);
-        setAllUsersPasswordToBCrypt(1, 51);
-    }
+//    public static void main(String[] args) {
+//        ApplicationContext context = SpringApplication.run(ErrorTicketManagerApplication.class, args);
+//        setAllUsersPasswordToBCrypt(1, 51);
+//    }
 
     // UserIDEnd is exclusive
     private static void setAllUsersPasswordToBCrypt(int userIDStart, int userIDEnd) {
