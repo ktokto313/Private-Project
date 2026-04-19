@@ -42,7 +42,7 @@ export default function Navbar() {
 
           {isOpen && (
             <div className="dropdown-menu">
-              <Link to="/settings" className="drop-item">Setting</Link>
+              <Link to="/setting" className="drop-item">Setting</Link>
               <button onClick={handleLogout} className="drop-item logout">
                 Log Out
               </button>

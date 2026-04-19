@@ -7,14 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import lkt.service.IUserService;
+import tools.jackson.databind.node.ObjectNode;
 
 @RestController
 @RequestMapping("/api/users")
@@ -38,8 +33,7 @@ public class UserController {
     @PutMapping("/{id}/password")
     public ResponseEntity<Void> changeUserPassword(
             @PathVariable Integer id,
-            @RequestParam String password,
-            @RequestParam String newPassword,
+            @RequestBody ObjectNode jsonNodes,
             HttpServletRequest request
     ) {
         User authenticatedUser = getUser(request);
@@ -49,9 +43,9 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        boolean updated = userService.changePassword(id, password, newPassword);
+        boolean updated = userService.changePassword(id, jsonNodes.get("password").asString(), jsonNodes.get("newPassword").asString());
         if (!updated) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         return ResponseEntity.ok().build();
     }

@@ -1,0 +1,343 @@
+/* Statistics.css */
+.statistics-page {
+    padding: 2rem;
+    margin: 0 auto;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: #1e293b;
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.page-header h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    color: #0f172a;
+    background: linear-gradient(135deg, #2563eb, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.filters {
+    display: flex;
+    gap: 1.5rem;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.filters label {
+    display: flex;
+    flex-direction: column;
+    font-weight: 500;
+    color: #334155;
+    font-size: 0.875rem;
+}
+
+.filters input[type="date"] {
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    color: #1e293b;
+    background: white;
+}
+
+.filters input[type="date"]:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stats-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid #f1f5f9;
+}
+
+.stats-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 20px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+}
+
+.stats-card h3 {
+    margin: 0 0 1.5rem 0;
+    color: #0f172a;
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+/* Incident Types */
+.incident-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.incident-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.875rem 0;
+    border-bottom: 1px solid #f1f5f9;
+    color: #475569;
+    transition: background-color 0.2s ease;
+}
+
+.incident-list li:hover {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    background-color: #f8fafc;
+    border-radius: 6px;
+}
+
+.incident-list li:last-child {
+    border-bottom: none;
+}
+
+.incident-name {
+    font-weight: 500;
+}
+
+.incident-badge {
+    background: #e2e8f0;
+    color: #475569;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.empty-state {
+    text-align: center;
+    color: #94a3b8;
+    padding: 2rem 0;
+    font-style: italic;
+}
+
+/* Tooltips */
+.custom-tooltip {
+    background: rgba(255, 255, 255, 0.98);
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+}
+
+.custom-tooltip p {
+    margin: 0.25rem 0;
+    font-weight: 600;
+}
+
+.success-text {
+    color: #16a34a;
+}
+
+.danger-text {
+    color: #dc2626;
+}
+
+/* Handling Time */
+.avg-time-display {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.overall-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #eff6ff, #f8fafc);
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    border: 1px solid #e0e7ff;
+}
+
+.stat-value {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #2563eb;
+    letter-spacing: -0.05em;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.tier-breakdown {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tier-breakdown li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+    transition: all 0.2s ease;
+}
+
+.tier-breakdown li:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.tier-name {
+    font-weight: 600;
+    color: #475569;
+}
+
+.tier-value {
+    font-weight: 700;
+    color: #0f172a;
+}
+
+/* Ratio Header */
+.ratio-counts {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+}
+
+.ratio-counts .on-time-text {
+    color: #16a34a;
+}
+
+.ratio-counts .overdue-text {
+    color: #dc2626;
+}
+
+/* Backlog Table */
+.backlog-section {
+    width: 100%;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.backlog-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.backlog-table th,
+.backlog-table td {
+    padding: 1rem 1.5rem;
+    text-align: left;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.backlog-table th {
+    background: #f8fafc;
+    font-weight: 600;
+    color: #64748b;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.backlog-table th:first-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.backlog-table th:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.backlog-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.backlog-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.font-medium {
+    font-weight: 500;
+    color: #0f172a;
+}
+
+/* Status Pills */
+.status-pill {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.status-pill.created {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.status-pill.processing {
+    background: #fef9c3;
+    color: #854d0e;
+}
+
+.status-pill.resolved {
+    background: #e0f2fe;
+    color: #075985;
+}
+
+.status-pill.done {
+    background: #dcfce3;
+    color: #166534;
+}
