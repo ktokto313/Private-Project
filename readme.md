@@ -21,7 +21,7 @@ This is a full-stack project for managing error tickets. It comprises a React fr
 
 ## Environment Configuration
 
-The project uses two primary files for configurations and environment variables:
+The project uses one primary files for configurations and environment variables:
 
 ### 1. `.env`
 This file configures the Spring Boot application and JWT properties:
@@ -44,6 +44,7 @@ JWT_SECRET: a-string-for-testing
 
 ### Prerequisites
 * [Docker and Docker Compose](https://www.docker.com/)
+* Java 17
 
 ### Running the Application
 
