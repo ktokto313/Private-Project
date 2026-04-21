@@ -57,7 +57,8 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleSearchUser = async () => {
+  const handleSearchUser = async (e) => {
+    e.preventDefault();
     if (!searchUsername.trim()) return;
 
     try {

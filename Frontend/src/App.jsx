@@ -16,14 +16,14 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
+          <Route path="*" element={<LoginPage />} />
           <Route element={<ProtectedRoute />}>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/ticket/:id" element={<TicketDetail />} />
-            <Route path="/admin-dashboard" element={<AdminDashboard />} />
-            <Route path="/setting" element={<Setting />} />
-            <Route path="/statistics" element={<Statistics />} />
+            <Route path="/dashboard/*" element={<Dashboard />} />
+            <Route path="/profile/*" element={<Profile />} />
+            <Route path="/ticket/:id/*" element={<TicketDetail />} />
+            <Route path="/admin-dashboard/*" element={<AdminDashboard />} />
+            <Route path="/setting/*" element={<Setting />} />
+            <Route path="/statistics/*" element={<Statistics />} />
           </Route>
         </Routes>
       </BrowserRouter>
