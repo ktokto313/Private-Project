@@ -17,8 +17,12 @@ import lkt.util.CookieUtil;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+    private final IAuthService authService;
+
     @Autowired
-    private IAuthService authService;
+    public AuthController(IAuthService authService) {
+        this.authService = authService;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody User user) {

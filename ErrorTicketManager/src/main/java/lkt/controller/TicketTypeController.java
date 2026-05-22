@@ -16,8 +16,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/ticket-type")
 public class TicketTypeController {
+    private final ITicketTypeService ticketTypeService;
+
     @Autowired
-    private ITicketTypeService ticketTypeService;
+    public TicketTypeController(ITicketTypeService ticketTypeService) {
+        this.ticketTypeService = ticketTypeService;
+    }
 
     @GetMapping
     public ResponseEntity<List<TicketType>> getAll() {

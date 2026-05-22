@@ -23,8 +23,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {
+    private final IAdminService adminService;
+
     @Autowired
-    private IAdminService adminService;
+    public AdminController(IAdminService adminService) {
+        this.adminService = adminService;
+    }
 
     @PostMapping("/users")
     public ResponseEntity<User> addAccount(

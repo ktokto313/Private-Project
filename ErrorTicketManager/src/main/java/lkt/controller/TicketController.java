@@ -19,8 +19,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/tickets")
 public class TicketController {
+    private final ITicketService ticketService;
+
     @Autowired
-    private ITicketService ticketService;
+    public TicketController(ITicketService ticketService) {
+        this.ticketService = ticketService;
+    }
 
     @PostMapping
     public ResponseEntity<Void> createTicket(

@@ -13,8 +13,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/priorities")
 public class PriorityController {
+    private final IPriorityService priorityService;
+
     @Autowired
-    private IPriorityService priorityService;
+    public PriorityController(IPriorityService priorityService) {
+        this.priorityService = priorityService;
+    }
 
     @GetMapping
     public ResponseEntity<List<Priority>> getAll() {

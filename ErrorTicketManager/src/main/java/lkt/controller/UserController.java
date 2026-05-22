@@ -14,11 +14,15 @@ import tools.jackson.databind.node.ObjectNode;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-    @Autowired
-    private IUserService userService;
+    private final IUserService userService;
 
     @Value("${jwt.cookie.name}")
     private String cookieName;
+
+    @Autowired
+    public UserController(IUserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/me")
     public ResponseEntity<User> getLoggedInUserInfo(HttpServletRequest request) {
