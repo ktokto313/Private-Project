@@ -39,8 +39,6 @@ services:
     image: error-ticket-manager:lastest
     restart: unless-stopped
     env_file: ".env"
-    ports:
-      - 8081:8081
     networks:
       - frontend
       - backend
