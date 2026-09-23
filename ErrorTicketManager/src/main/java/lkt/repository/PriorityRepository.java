@@ -14,11 +14,14 @@ import java.util.List;
 
 @Repository
 public class PriorityRepository implements IPriorityRepository {
-    @Autowired
-    private Connection connection;
+    private final Connection connection;
+    private final Mapper mapper;
 
     @Autowired
-    private Mapper mapper;
+    public PriorityRepository(Connection connection, Mapper mapper) {
+        this.connection = connection;
+        this.mapper = mapper;
+    }
 
     @Override
     public List<Priority> findAll() {
@@ -98,7 +101,7 @@ public class PriorityRepository implements IPriorityRepository {
             preparedStatement.setString(2, priority.getName());
             preparedStatement.setObject(3, priority.getTimeToRespond());
             preparedStatement.setObject(4, priority.getTimeToFinish());
-            preparedStatement.setInt(5, priority.getID());
+            preparedStatement.setInt(5, priority.getId());
             return preparedStatement.executeUpdate() == 1;
         } catch (SQLException e) {
             e.printStackTrace();

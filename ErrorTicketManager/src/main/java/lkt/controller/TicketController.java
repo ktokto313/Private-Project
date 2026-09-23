@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -85,21 +86,6 @@ public class TicketController {
         return ResponseEntity.ok().build();
     }
 
-// TODO disabled api line, migrated to admin APIs
-//    @PostMapping("/{id}/assignees")
-//    public ResponseEntity<Void> addAssignee(
-//            @PathVariable("id") Integer ticketID,
-//            @RequestParam Integer userID,
-//            HttpServletRequest request
-//    ) {
-//        User authenticatedUser = getUser(request);
-//        boolean assigned = ticketService.addAssignee(ticketID, userID, authenticatedUser);
-//        if (!assigned) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-//        }
-//        return ResponseEntity.status(HttpStatus.CREATED).build();
-//    }
-
     @PostMapping("/{id}/comments")
     public ResponseEntity<Void> addComment(
             @PathVariable("id") Integer ticketID,
@@ -127,7 +113,7 @@ public class TicketController {
 
     private byte[] getFileBytes(MultipartFile file) throws IOException {
         if (file == null || file.isEmpty()) {
-            return null;
+            return new byte[0];
         }
         return file.getBytes();
     }

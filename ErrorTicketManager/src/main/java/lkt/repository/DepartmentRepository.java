@@ -14,11 +14,14 @@ import java.util.List;
 
 @Repository
 public class DepartmentRepository implements IDepartmentRepository {
-    @Autowired
     private Connection connection;
+    private Mapper mapper;
 
     @Autowired
-    private Mapper mapper;
+    public DepartmentRepository(Connection connection, Mapper mapper) {
+        this.connection = connection;
+        this.mapper = mapper;
+    }
 
     @Override
     public List<Department> findAll() {

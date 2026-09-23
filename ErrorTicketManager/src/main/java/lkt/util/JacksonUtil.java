@@ -2,7 +2,9 @@ package lkt.util;
 
 import tools.jackson.databind.ObjectMapper;
 
-public class JacksonUtil {
+public final class JacksonUtil {
+    private JacksonUtil() {}
+
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static String parseObjectToJSONString(Object object) {

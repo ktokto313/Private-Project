@@ -108,20 +108,6 @@ public class TicketService implements ITicketService {
         return result;
     }
 
-// TODO disabled api line, migrated to admin APIs
-//    @Override
-//    public boolean addAssignee(Integer ticketID, Integer userID, User authenticatedUser) {
-//        if (!canManageTicket(authenticatedUser) || ticketID == null || userID == null) {
-//            return false;
-//        }
-//        Ticket ticket = viewTicket(ticketID, authenticatedUser);
-//        User assignee = userRepository.findByUserID(userID);
-//        if (ticket == null || assignee == null) {
-//            return false;
-//        }
-//        return ticketRepository.updateAssignee(ticketID, userID);
-//    }
-
     @Override
     public boolean addComment(
             Integer ticketID,
@@ -164,10 +150,6 @@ public class TicketService implements ITicketService {
 
     private boolean canAccessAllTickets(User user) {
         return user != null && (user.getRole() == Role.ADMIN);
-    }
-
-    private boolean canManageTicket(User user) {
-        return canAccessAllTickets(user);
     }
 
     private boolean isBlank(String value) {

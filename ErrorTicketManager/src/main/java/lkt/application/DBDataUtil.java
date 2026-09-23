@@ -3,16 +3,14 @@ package lkt.application;
 import lkt.model.User;
 import lkt.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 //@SpringBootApplication
 //@ComponentScan(basePackages = "lkt")
 public class DBDataUtil {
     private static IUserRepository userRepository;
+
+    private DBDataUtil() {}
 
     static {
         System.setProperty("user.timezone", "Asia/Ho_Chi_Minh");

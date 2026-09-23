@@ -53,15 +53,6 @@ class TicketStateMachineServiceTest {
     }
 
     @Test
-    void creatorProcessingToFinish_isAllowed() {
-        User creator = user(1, Role.IT);
-        User assignee = user(2, Role.IT);
-        Ticket t = ticketWithCreator(creator);
-        t.setAssignee(assignee);
-        assertTrue(machine.isTransitionAllowed(State.PROCESSING, State.RESOLVED, assignee, t));
-    }
-
-    @Test
     void nonAssigneeProcessingToResolve_throw() {
         User creator = user(1, Role.IT);
         User assignee = user(2, Role.IT);

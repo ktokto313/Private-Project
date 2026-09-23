@@ -6,14 +6,16 @@ import lkt.model.User;
 import java.util.List;
 
 public class NotificationUtil {
+    private NotificationUtil() {}
+
     public static String buildNotificationMessage(User actionUser, List<User> receivingUserList, String action, int ticketID, String ticketTitle, String actionResult) {
         String actionText = "";
         State state = Util.getStateFromString(action);
         if (state != null) {
             switch (state) {
-                case CREATED -> {
+                case CREATED ->
                     actionText = "created a new";
-                }
+
                 case PROCESSING -> {
                     actionText = "changed state of the";
                     actionResult = State.PROCESSING.name();
@@ -22,9 +24,8 @@ public class NotificationUtil {
                     actionText = "mark";
                     actionResult = "as resolved";
                 }
-                case DONE -> {
+                case DONE ->
                     actionText = "accepted resolution of";
-                }
             }
         } else {
             actionText = switch (action) {

@@ -6,18 +6,15 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CookieUtil {
+public final class CookieUtil {
     private static Long cookieMaxAge;
     private static String cookieName;
 
-    @Value("${jwt.lifetime}")
-    private void setCookieMaxAge(Long cookieMaxAge) {
-        CookieUtil.cookieMaxAge = cookieMaxAge;
-    }
+    private CookieUtil() {}
 
-    @Value("${jwt.cookie.name}")
-    private void setCookieName(String cookieName) {
-        CookieUtil.cookieName = cookieName;
+    static {
+        cookieMaxAge = Long.parseLong(System.getenv("JWT_LIFETIME"));
+        cookieName = System.getenv("JWT_COOKIE_NAME");
     }
 
     public static ResponseCookie makeCookieFromJWT(String jwt) {
@@ -31,7 +28,7 @@ public class CookieUtil {
                 .build();
     }
 
-    public static ResponseCookie invalidateCookie(String cookie) {
+    public static ResponseCookie invalidateCookie() {
         return ResponseCookie.from(cookieName)
                 .value("")
                 .path("/")

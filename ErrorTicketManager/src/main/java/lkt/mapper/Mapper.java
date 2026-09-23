@@ -17,14 +17,14 @@ public class Mapper {
         user.setUsername(resultSet.getString("username"));
         user.setPassword(resultSet.getString("password"));
         Department department = new Department();
-        department.setID(resultSet.getInt("departmentid"));
+        department.setId(resultSet.getInt("departmentid"));
         user.setDepartment(department);
         return user;
     }
 
     public Ticket mapTicket(ResultSet resultSet) throws SQLException {
         Ticket ticket = new Ticket();
-        ticket.setID(resultSet.getInt("ticket_id"));
+        ticket.setId(resultSet.getInt("ticket_id"));
         ticket.setTitle(resultSet.getString("ticket_title"));
         ticket.setDetail(resultSet.getString("ticket_detail"));
         ticket.setState(Util.getStateFromString(resultSet.getString("ticket_state")));
@@ -58,7 +58,7 @@ public class Mapper {
             return null;
         }
         Priority priority = new Priority();
-        priority.setID(id);
+        priority.setId(id);
         priority.setLevelOfPriority(resultSet.getInt("priority_levelofpriority"));
         priority.setName(resultSet.getString("priority_name"));
         return priority;
@@ -70,7 +70,7 @@ public class Mapper {
             return null;
         }
         TicketType ticketType = new TicketType();
-        ticketType.setID(id);
+        ticketType.setId(id);
         ticketType.setTitle(resultSet.getString("tickettype_title"));
         ticketType.setDescription(resultSet.getString("tickettype_description"));
         return ticketType;
@@ -78,7 +78,7 @@ public class Mapper {
 
     public TicketType mapTicketTypeRow(ResultSet resultSet) throws SQLException {
         TicketType ticketType = new TicketType();
-        ticketType.setID(resultSet.getInt("id"));
+        ticketType.setId(resultSet.getInt("id"));
         ticketType.setTitle(resultSet.getString("title"));
         ticketType.setDescription(resultSet.getString("description"));
         return ticketType;
@@ -86,7 +86,7 @@ public class Mapper {
 
     public Priority mapPriority(ResultSet resultSet) throws SQLException {
         Priority priority = new Priority();
-        priority.setID(resultSet.getInt("id"));
+        priority.setId(resultSet.getInt("id"));
         priority.setLevelOfPriority(resultSet.getInt("levelofpriority"));
         priority.setName(resultSet.getString("name"));
         priority.setTimeToRespond(resultSet.getObject("timetorespond", PGInterval.class));
@@ -96,7 +96,7 @@ public class Mapper {
 
     public Department mapDepartmentRow(ResultSet resultSet) throws SQLException {
         Department department = new Department();
-        department.setID(resultSet.getInt("id"));
+        department.setId(resultSet.getInt("id"));
         department.setName(resultSet.getString("name"));
         return department;
     }

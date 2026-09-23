@@ -3,18 +3,18 @@ package lkt.model;
 import org.postgresql.util.PGInterval;
 
 public class Priority {
-    private Integer ID;
+    private Integer id;
     private int levelOfPriority;
     private String name;
     private PGInterval timeToRespond;
     private PGInterval timeToFinish;
 
-    public Integer getID() {
-        return ID;
+    public Integer getId() {
+        return id;
     }
 
-    public void setID(Integer ID) {
-        this.ID = ID;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public int getLevelOfPriority() {

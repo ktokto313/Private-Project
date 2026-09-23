@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 public class ResponseUtil {
+    private ResponseUtil() {}
+
     public static void writeErrorResponse(
             HttpServletResponse response,
             HttpStatus status

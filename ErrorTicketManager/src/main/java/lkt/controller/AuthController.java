@@ -46,7 +46,7 @@ public class AuthController {
             return ResponseEntity.badRequest()
                     .build();
         }
-        ResponseCookie clearedCookie = CookieUtil.invalidateCookie(authCookie.getValue());
+        ResponseCookie clearedCookie = CookieUtil.invalidateCookie();
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, clearedCookie.toString())

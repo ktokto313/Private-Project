@@ -9,8 +9,12 @@ import java.util.List;
 
 @Service
 public class PriorityService implements IPriorityService {
-    @Autowired
     private IPriorityRepository priorityRepository;
+
+    @Autowired
+    public PriorityService(IPriorityRepository priorityRepository) {
+        this.priorityRepository = priorityRepository;
+    }
 
     @Override
     public List<Priority> getAllPriorities() {

@@ -14,31 +14,18 @@ import java.time.Instant;
 
 @Component
 public class JWTUtil {
-    private static String secret;
     private static Algorithm algorithm;
     private static String jwtIssuer;
     private static long lifetime;
     private static String cookieName;
 
-    @Value("${jwt.cookie.name}")
-    private void setCookieName(String cookieName) {
-        JWTUtil.cookieName = cookieName;
-    }
+    private JWTUtil() {}
 
-    @Value("${jwt.issuer}")
-    private void setJwtIssuer(String issuer) {
-        JWTUtil.jwtIssuer = issuer;
-    }
-
-    @Value("${jwt.lifetime}")
-    private void setLifetime(Long lifetime) {
-        JWTUtil.lifetime = lifetime;
-    }
-
-    @Value("${jwt.secret}")
-    private void setSecret(String secret) {
-        JWTUtil.secret = secret;
-        JWTUtil.algorithm = Algorithm.HMAC256(secret);
+    static {
+        cookieName = System.getenv("JWT_COOKIE_NAME");
+        jwtIssuer = System.getenv("JWT_ISSUER");
+        lifetime = Long.parseLong(System.getenv("JWT_LIFETIME"));
+        algorithm = Algorithm.HMAC256(System.getenv("JWT_SECRET"));
     }
 
     public static String createToken(User user) {

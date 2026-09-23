@@ -1,4 +1,4 @@
-package lkt.service.eventLog;
+package lkt.service.event_log;
 
 import lkt.model.User;
 import lkt.observer.INotificationSubscriber;
@@ -11,9 +11,12 @@ import java.util.List;
 
 @Component
 public class EventLogService implements INotificationSubscriber {
+    private final TicketRepository ticketRepository;
 
     @Autowired
-    TicketRepository ticketRepository;
+    public EventLogService(TicketRepository ticketRepository) {
+        this.ticketRepository = ticketRepository;
+    }
 
     @Override
     public void update(User actionUser, List<User> receivingUserList, String action, int ticketID, String ticketTitle, String actionResult) {

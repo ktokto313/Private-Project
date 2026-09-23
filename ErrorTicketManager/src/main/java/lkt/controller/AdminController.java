@@ -98,7 +98,7 @@ public class AdminController {
             @PathVariable Integer userID,
             @RequestBody Department department
     ) {
-        boolean updated = adminService.changeDepartment(userID, department.getID());
+        boolean updated = adminService.changeDepartment(userID, department.getId());
         if (!updated) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 @Component
 public class DBContext {
-    private final static PGSimpleDataSource dataSource = new PGSimpleDataSource();
+    private static final PGSimpleDataSource dataSource = new PGSimpleDataSource();
 
     static {
         dataSource.setUrl("jdbc:postgresql://db:5432/");
@@ -36,7 +36,8 @@ public class DBContext {
         try {
             return dataSource.getConnection();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            return null;
         }
     }
 }

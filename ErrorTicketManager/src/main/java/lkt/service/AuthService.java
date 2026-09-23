@@ -2,6 +2,7 @@ package lkt.service;
 
 import lkt.model.User;
 import lkt.repository.IDepartmentRepository;
+import lkt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,14 +11,17 @@ import lkt.util.JWTUtil;
 
 @Service
 public class AuthService implements IAuthService {
-    @Autowired
-    private IUserRepository userRepository;
-
-    @Autowired
-    private IDepartmentRepository departmentRepository;
+    private final IUserRepository userRepository;
+    private final IDepartmentRepository departmentRepository;
     // Create default bCrypt encoder with strength 10
     // TODO: tweak this to achieve ~1 sec verify time
     private static final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
+    @Autowired
+    public AuthService(IUserRepository userRepository, IDepartmentRepository departmentRepository) {
+        this.userRepository = userRepository;
+        this.departmentRepository = departmentRepository;
+    }
 
     public String login(User user) {
         User foundUser = userRepository.findByUsername(user.getUsername());

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Ticket {
-    private Integer ID;
+    private Integer id;
     private String title;
     private String detail;
     private User creator;
@@ -21,12 +21,12 @@ public class Ticket {
     private List<Comment> comments = new ArrayList<>();
     private List<Attachment> attachments = new ArrayList<>();
 
-    public Integer getID() {
-        return ID;
+    public Integer getId() {
+        return id;
     }
 
-    public void setID(Integer ID) {
-        this.ID = ID;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getTitle() {

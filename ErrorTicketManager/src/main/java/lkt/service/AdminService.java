@@ -61,7 +61,7 @@ public class AdminService implements IAdminService {
     @Override
     public List<User> getAccountsByRole(Role role) {
         List<User> userList = userRepository.findUsersByRole(role);
-        if (userList == null) return null;
+        if (userList == null) return new ArrayList<>();
         userList.replaceAll(User::getUserNoPassword);
         return userList;
     }
@@ -127,7 +127,7 @@ public class AdminService implements IAdminService {
 
     @Override
     public boolean changePriority(Priority priority) {
-        if (priority.getID() == null || priority.getName() == null || priority.getName().isBlank() ||
+        if (priority.getId() == null || priority.getName() == null || priority.getName().isBlank() ||
                 priority.getTimeToRespond() == null || priority.getTimeToRespond().isNull()||
                 priority.getTimeToFinish() == null || priority.getTimeToFinish().isNull()) {
             return false;
@@ -159,7 +159,7 @@ public class AdminService implements IAdminService {
         if (modifiedTicket.getTicketType() != null) {
             baseTicket.setTicketType(modifiedTicket.getTicketType());
             actions.add("ticketType");
-            actionResults.add(ticketTypeRepository.findByID(baseTicket.getTicketType().getID()).getTitle());
+            actionResults.add(ticketTypeRepository.findByID(baseTicket.getTicketType().getId()).getTitle());
         }
         if (modifiedTicket.getAssignee() != null) {
             baseTicket.setAssignee(modifiedTicket.getAssignee());
@@ -169,7 +169,7 @@ public class AdminService implements IAdminService {
         if (modifiedTicket.getPriority() != null) {
             baseTicket.setPriority(modifiedTicket.getPriority());
             actions.add("priority");
-            actionResults.add(priorityRepository.findByID(baseTicket.getPriority().getID()).getName());
+            actionResults.add(priorityRepository.findByID(baseTicket.getPriority().getId()).getName());
         }
         if (modifiedTicket.getState() != null) {
             if (!ticketStateMachineService.isTransitionAllowed(baseTicket.getState(), modifiedTicket.getState(), authenticatedUser, baseTicket)) {

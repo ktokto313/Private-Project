@@ -69,7 +69,7 @@ public class User implements Serializable {
 
     @JsonIgnore
     public Integer getDepartmentID() {
-        return department == null ? null : department.getID();
+        return department == null ? null : department.getId();
     }
 
     @JsonIgnore
@@ -79,7 +79,7 @@ public class User implements Serializable {
             return;
         }
         Department departmentRef = new Department();
-        departmentRef.setID(departmentID);
+        departmentRef.setId(departmentID);
         this.department = departmentRef;
     }
 

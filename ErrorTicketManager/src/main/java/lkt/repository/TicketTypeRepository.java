@@ -14,11 +14,14 @@ import java.util.List;
 
 @Repository
 public class TicketTypeRepository implements ITicketTypeRepository {
-    @Autowired
-    private Connection connection;
+    private final Connection connection;
+    private final Mapper mapper;
 
     @Autowired
-    private Mapper mapper;
+    public TicketTypeRepository(Connection connection, Mapper mapper) {
+        this.connection = connection;
+        this.mapper = mapper;
+    }
 
     @Override
     public List<TicketType> findAll() {

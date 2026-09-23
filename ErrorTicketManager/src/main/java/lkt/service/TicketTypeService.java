@@ -9,8 +9,12 @@ import java.util.List;
 
 @Service
 public class TicketTypeService implements ITicketTypeService {
+    private final ITicketTypeRepository ticketTypeRepository;
+
     @Autowired
-    private ITicketTypeRepository ticketTypeRepository;
+    public TicketTypeService(ITicketTypeRepository ticketTypeRepository) {
+        this.ticketTypeRepository = ticketTypeRepository;
+    }
 
     @Override
     public List<TicketType> getAllTicketTypes() {

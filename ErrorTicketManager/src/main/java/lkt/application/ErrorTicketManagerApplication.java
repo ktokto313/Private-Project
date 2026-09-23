@@ -14,7 +14,7 @@ public class ErrorTicketManagerApplication {
 	}
 
 	public static void main(String[] args) {
-		ApplicationContext context = SpringApplication.run(ErrorTicketManagerApplication.class, args);
+		SpringApplication.run(ErrorTicketManagerApplication.class, args);
 	}
 
 }

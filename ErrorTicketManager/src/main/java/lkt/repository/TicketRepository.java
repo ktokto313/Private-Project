@@ -21,11 +21,43 @@ import java.util.List;
 
 @Repository
 public class TicketRepository implements ITicketRepository {
-    @Autowired
     private Connection connection;
+    private Mapper mapper;
+    private final String baseTicketQuery = """
+                select t.id as ticket_id,
+                       t.title as ticket_title,
+                       t.detail as ticket_detail,
+                       t.state as ticket_state,
+                       t.timecreated as ticket_timecreated,
+                       t.timeprocessing as ticket_timeprocessing,
+                       t.timeresolved as ticket_timeresolved,
+                       t.cause as ticket_cause,
+                       c.id as creator_id,
+                       c.role as creator_role,
+                       c.username as creator_username,
+                       c.departmentid as creator_departmentid,
+                       a.id as assignee_id,
+                       a.role as assignee_role,
+                       a.username as assignee_username,
+                       a.departmentid as assignee_departmentid,
+                       p.id as priority_id,
+                       p.levelofpriority as priority_levelofpriority,
+                       p.name as priority_name,
+                       tt.id as tickettype_id,
+                       tt.title as tickettype_title,
+                       tt.description as tickettype_description
+                from tickets t
+                left join users c on c.id = t.creator
+                left join users a on a.id = t.assignee
+                left join priorities p on p.id = t.priority
+                left join tickettypes tt on tt.id = t.tickettype
+                """;
 
     @Autowired
-    private Mapper mapper;
+    public TicketRepository(Connection connection, Mapper mapper) {
+        this.connection = connection;
+        this.mapper = mapper;
+    }
 
     @Override
     public Integer insertTicket(
@@ -83,7 +115,7 @@ public class TicketRepository implements ITicketRepository {
     @Override
     public List<Ticket> findAccessibleTickets(Integer userID, boolean includeAllTickets) {
         List<Ticket> tickets = new ArrayList<>();
-        String sql = baseTicketQuery() + """
+        String sql = baseTicketQuery + """
                 where (? = true or t.creator = ? or t.assignee = ?)
                 order by t.timecreated desc, t.id desc
                 """;
@@ -103,7 +135,7 @@ public class TicketRepository implements ITicketRepository {
 
     @Override
     public Ticket findAccessibleTicketByID(Integer ticketID, Integer userID, boolean includeAllTickets) {
-        String sql = baseTicketQuery() + """
+        String sql = baseTicketQuery + """
                 where t.id = ? and (? = true or t.creator = ? or t.assignee = ?)
                 """;
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -146,7 +178,7 @@ public class TicketRepository implements ITicketRepository {
             preparedStatement.setString(4, ticketState);
             preparedStatement.setTimestamp(5, Timestamp.valueOf(now));
             preparedStatement.setInt(6, ticket.getAssignee().getUserID());
-            preparedStatement.setInt(7, ticket.getPriority().getID());
+            preparedStatement.setInt(7, ticket.getPriority().getId());
             preparedStatement.setInt(8, ticketID);
             return preparedStatement.executeUpdate() == 1;
         } catch (SQLException e) {
@@ -210,11 +242,11 @@ public class TicketRepository implements ITicketRepository {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Comment comment = new Comment();
-                comment.setID(resultSet.getInt("comment_id"));
+                comment.setId(resultSet.getInt("comment_id"));
                 comment.setDetail(resultSet.getString("comment_detail"));
                 comment.setTimeCreated(Util.getLocalDateTime(resultSet, "comment_timecreated"));
                 comment.setCreator(mapper.mapUser(resultSet, "comment_creator"));
-                comment.setAttachments(findAttachments(AttachmentType.COMMENT, comment.getID()));
+                comment.setAttachments(findAttachments(AttachmentType.COMMENT, comment.getId()));
                 comments.add(comment);
             }
         }
@@ -244,37 +276,5 @@ public class TicketRepository implements ITicketRepository {
             }
         }
         return attachments;
-    }
-
-    private String baseTicketQuery() {
-        return """
-                select t.id as ticket_id,
-                       t.title as ticket_title,
-                       t.detail as ticket_detail,
-                       t.state as ticket_state,
-                       t.timecreated as ticket_timecreated,
-                       t.timeprocessing as ticket_timeprocessing,
-                       t.timeresolved as ticket_timeresolved,
-                       t.cause as ticket_cause,
-                       c.id as creator_id,
-                       c.role as creator_role,
-                       c.username as creator_username,
-                       c.departmentid as creator_departmentid,
-                       a.id as assignee_id,
-                       a.role as assignee_role,
-                       a.username as assignee_username,
-                       a.departmentid as assignee_departmentid,
-                       p.id as priority_id,
-                       p.levelofpriority as priority_levelofpriority,
-                       p.name as priority_name,
-                       tt.id as tickettype_id,
-                       tt.title as tickettype_title,
-                       tt.description as tickettype_description
-                from tickets t
-                left join users c on c.id = t.creator
-                left join users a on a.id = t.assignee
-                left join priorities p on p.id = t.priority
-                left join tickettypes tt on tt.id = t.tickettype
-                """;
     }
 }
